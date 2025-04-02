@@ -300,10 +300,12 @@ endif()
 
 target_include_directories(GeodeBindings PUBLIC
 	${GEODE_LOADER_PATH}/include
+	${GEODE_LOADER_PATH}/include/Geode/cocos
 	${GEODE_LOADER_PATH}/include/Geode/cocos/include
 	${GEODE_LOADER_PATH}/include/Geode/cocos/extensions
 	${GEODE_LOADER_PATH}/include/Geode/fmod
 )
+add_compile_definitions(-DWIN32_LEAN_AND_MEAN=1)
 target_link_directories(GeodeBindings PUBLIC ${GEODE_LOADER_PATH}/include/link)
 target_link_libraries(GeodeBindings PUBLIC fmt TulipHookInclude mat-json GeodeResult)
 target_link_libraries(${PROJECT_NAME} INTERFACE GeodeBindings)

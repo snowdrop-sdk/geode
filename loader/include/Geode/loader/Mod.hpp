@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../DefaultInclude.hpp"
-#include "../cocos/support/zip_support/ZipUtils.h"
+// #include "../cocos/support/zip_support/ZipUtils.h"
 #include <Geode/Result.hpp>
 #include "../utils/VersionInfo.hpp"
 #include "../utils/general.hpp"

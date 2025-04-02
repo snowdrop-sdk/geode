@@ -2,7 +2,7 @@
 
 #include "SceneManager.hpp"
 #include <cocos2d.h>
-#include <cocos-ext.h>
+// #include <cocos-ext.h>
 #include <Geode/binding/TextAlertPopup.hpp>
 #include "../utils/cocos.hpp"
 

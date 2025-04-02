@@ -3,7 +3,7 @@
 #pragma warning(default : 4067)
 #pragma warning(disable : 4251) // dll-interface
 #pragma warning(disable : 4244) // narrowing conversion
-
+#include <WinSock2.h>
 #include <Windows.h>
 #include <cstring>
 #include <type_traits>

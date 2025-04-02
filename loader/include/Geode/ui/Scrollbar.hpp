@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cocos2d.h>
-#include <cocos-ext.h>
+// #include <cocos-ext.h>
 #include <Geode/binding/CCScrollLayerExt.hpp>
 
 namespace geode {

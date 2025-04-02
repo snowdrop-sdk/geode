@@ -1,4 +1,5 @@
 #include <Windows.h>
+#include <shellapi.h>
 #include <string>
 #include <array>
 #include <vector>

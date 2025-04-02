@@ -4,7 +4,6 @@
 #include "../platform/cplatform.h"
 
 #include <Geode/DefaultInclude.hpp>
-#include <ccTypes.h>
 #include <chrono>
 #include <filesystem>
 #include <matjson.hpp>
