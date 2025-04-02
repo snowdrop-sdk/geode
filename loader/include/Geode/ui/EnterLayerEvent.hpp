@@ -3,10 +3,6 @@
 #include "../loader/Event.hpp"
 #include <optional>
 
-namespace cocos2d {
-    class CCNode;
-}
-
 namespace geode {
     template<class T>
     concept InheritsCCNode = std::is_base_of_v<cocos2d::CCNode, T>;

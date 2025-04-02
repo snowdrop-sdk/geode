@@ -339,4 +339,43 @@ public: virtual void set##funName(varType var)   \
     #endif
 #endif
 
+namespace tulip::hook {
+    struct HandlerMetadata;
+}
+
+namespace geode {
+    template <class, class>
+    class Result;
+
+    namespace modifier {
+        class FieldContainer;
+
+        template <class Derived, class Base>
+        class ModifyDerive;
+
+        template <uint32_t>
+        uintptr_t address();
+
+        Result<tulip::hook::HandlerMetadata, std::string> handlerMetadataForAddress(uintptr_t address);
+    }
+
+    namespace addresser {
+        template <class Class>
+        Class* friendCreate(typename std::void_t<decltype(static_cast<Class* (*)()>(&Class::create))>*);
+    }
+}
+
+#define GEODE_FRIEND_MODIFY                                         \
+    template <class Derived, class Base>                            \
+    friend class ::geode::modifier::ModifyDerive;                   \
+    friend class ::GeodeNodeMetadata;                               \
+    template <uint32_t>                                             \
+    friend uintptr_t geode::modifier::address();                    \
+    friend geode::Result<tulip::hook::HandlerMetadata, std::string> \
+    geode::modifier::handlerMetadataForAddress(uintptr_t address);  \
+    template <class Class>                                          \
+    friend Class* geode::addresser::                                \
+        friendCreate(typename std::void_t<decltype(static_cast<Class* (*)()>(&Class::create))>*);
+
+
 #endif // __CC_PLATFORM_MACROS_H__

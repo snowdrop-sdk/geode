@@ -3,9 +3,6 @@
 #include "../DefaultInclude.hpp"
 #include "../ui/EnterLayerEvent.hpp"
 
-namespace cocos2d {
-    class CCNode;
-}
 
 namespace geode {
     template<class T>

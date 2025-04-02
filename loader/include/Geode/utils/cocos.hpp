@@ -8,8 +8,8 @@
 #include <functional>
 #include <type_traits>
 #include "../loader/Event.hpp"
-#include <Geode/binding/CCMenuItemSpriteExtra.hpp>
-#include <Geode/binding/CCMenuItemToggler.hpp>
+// #include <Geode/binding/CCMenuItemSpriteExtra.hpp>
+// #include <Geode/binding/CCMenuItemToggler.hpp>
 #include "../ui/Layout.hpp"
 #include "../ui/SpacerNode.hpp"
 
@@ -29,11 +29,11 @@ struct matjson::Serialize<cocos2d::ccColor4B> {
 
 // operators for CC geometry
 namespace cocos2d {
-    static constexpr cocos2d::CCPoint& operator*=(cocos2d::CCPoint& pos, float mul) {
-        pos.x *= mul;
-        pos.y *= mul;
-        return pos;
-    }
+    // static constexpr cocos2d::CCPoint& operator*=(cocos2d::CCPoint& pos, float mul) {
+    //     pos.x *= mul;
+    //     pos.y *= mul;
+    //     return pos;
+    // }
     static constexpr cocos2d::CCSize& operator*=(cocos2d::CCSize& size, float mul) {
         size.width *= mul;
         size.height *= mul;
@@ -73,11 +73,11 @@ namespace cocos2d {
         rect.size /= div;
         return rect;
     }
-    static constexpr cocos2d::CCPoint operator+=(cocos2d::CCPoint& pos, cocos2d::CCPoint const& add) {
-        pos.x += add.x;
-        pos.y += add.y;
-        return pos;
-    }
+    // static constexpr cocos2d::CCPoint operator+=(cocos2d::CCPoint& pos, cocos2d::CCPoint const& add) {
+    //     pos.x += add.x;
+    //     pos.y += add.y;
+    //     return pos;
+    // }
     static constexpr cocos2d::CCSize operator+=(cocos2d::CCSize& size, cocos2d::CCPoint const& add) {
         size.width += add.x;
         size.height += add.y;
@@ -101,11 +101,11 @@ namespace cocos2d {
         rect.size += add.size;
         return rect;
     }
-    static constexpr cocos2d::CCPoint operator-=(cocos2d::CCPoint& pos, cocos2d::CCPoint const& add) {
-        pos.x -= add.x;
-        pos.y -= add.y;
-        return pos;
-    }
+    // static constexpr cocos2d::CCPoint operator-=(cocos2d::CCPoint& pos, cocos2d::CCPoint const& add) {
+    //     pos.x -= add.x;
+    //     pos.y -= add.y;
+    //     return pos;
+    // }
     static constexpr cocos2d::CCSize operator-=(cocos2d::CCSize& size, cocos2d::CCPoint const& add) {
         size.width -= add.x;
         size.height -= add.y;
@@ -135,12 +135,12 @@ namespace cocos2d {
     static constexpr cocos2d::CCSize operator-(cocos2d::CCSize const& size) {
         return {-size.width, -size.height};
     }
-    static constexpr bool operator==(cocos2d::CCPoint const& p1, cocos2d::CCPoint const& p2) {
-        return p1.x == p2.x && p1.y == p2.y;
-    }
-    static constexpr bool operator!=(cocos2d::CCPoint const& p1, cocos2d::CCPoint const& p2) {
-        return p1.x != p2.x || p1.y != p2.y;
-    }
+    // static constexpr bool operator==(cocos2d::CCPoint const& p1, cocos2d::CCPoint const& p2) {
+    //     return p1.x == p2.x && p1.y == p2.y;
+    // }
+    // static constexpr bool operator!=(cocos2d::CCPoint const& p1, cocos2d::CCPoint const& p2) {
+    //     return p1.x != p2.x || p1.y != p2.y;
+    // }
     static constexpr bool operator==(cocos2d::CCSize const& s1, cocos2d::CCSize const& s2) {
         return s1.width == s2.width && s1.height == s2.height;
     }
@@ -165,26 +165,26 @@ namespace cocos2d {
     static constexpr bool operator!=(cocos2d::CCRect const& r1, cocos2d::CCRect const& r2) {
         return r1.origin != r2.origin || r1.size != r2.size;
     }
-    static constexpr bool operator==(cocos2d::ccColor4B const& c1, cocos2d::ccColor4B const& c2) {
-        return c1.r == c2.r && c1.g == c2.g && c1.b == c2.b && c1.a == c2.a;
-    }
+    // static constexpr bool operator==(cocos2d::ccColor4B const& c1, cocos2d::ccColor4B const& c2) {
+    //     return c1.r == c2.r && c1.g == c2.g && c1.b == c2.b && c1.a == c2.a;
+    // }
     static constexpr bool operator!=(cocos2d::ccColor4B const& c1, cocos2d::ccColor4B const& c2) {
         return c1.r != c2.r || c1.g != c2.g || c1.b != c2.b || c1.a != c2.a;
     }
-    static constexpr bool operator==(cocos2d::ccColor3B const& c1, cocos2d::ccColor3B const& c2) {
-        return c1.r == c2.r && c1.g == c2.g && c1.b == c2.b;
-    }
+    // static constexpr bool operator==(cocos2d::ccColor3B const& c1, cocos2d::ccColor3B const& c2) {
+    //     return c1.r == c2.r && c1.g == c2.g && c1.b == c2.b;
+    // }
     static constexpr bool operator!=(cocos2d::ccColor3B const& c1, cocos2d::ccColor3B const& c2) {
         return c1.r != c2.r || c1.g != c2.g || c1.b != c2.b;
     }
-    static constexpr bool operator==(cocos2d::ccHSVValue const& c1, cocos2d::ccHSVValue const& c2) {
-        return c1.h == c2.h && c1.s == c2.s && c1.v == c2.v && 
-            c1.absoluteSaturation == c2.absoluteSaturation && 
-            c1.absoluteBrightness == c2.absoluteBrightness;
-    }
-    static constexpr bool operator!=(cocos2d::ccHSVValue const& c1, cocos2d::ccHSVValue const& c2) {
-        return !(c1 == c2);
-    }
+    // static constexpr bool operator==(cocos2d::ccHSVValue const& c1, cocos2d::ccHSVValue const& c2) {
+    //     return c1.h == c2.h && c1.s == c2.s && c1.v == c2.v && 
+    //         c1.absoluteSaturation == c2.absoluteSaturation && 
+    //         c1.absoluteBrightness == c2.absoluteBrightness;
+    // }
+    // static constexpr bool operator!=(cocos2d::ccHSVValue const& c1, cocos2d::ccHSVValue const& c2) {
+    //     return !(c1 == c2);
+    // }
 }
 
 // Ref & Bug
@@ -624,7 +624,7 @@ namespace geode::cocos {
         if (i < 0) return nullptr;
         // check if forwards index is out of bounds
         if (static_cast<int>(x->getChildrenCount()) <= i) return nullptr;
-        return static_cast<T*>(x->getChildren()->objectAtIndex(i));
+        return static_cast<T*>(x->getChildren().at(i));
     }
 
     /**
@@ -743,10 +743,8 @@ namespace geode::cocos {
             return static_cast<Type*>(node);
 
         auto children = node->getChildren();
-        if (!children) return nullptr;
-
-        for (int i = 0; i < children->count(); ++i) {
-            auto newParent = static_cast<cocos2d::CCNode*>(children->objectAtIndex(i));
+        for (int i = 0; i < node->getChildrenCount(); ++i) {
+            auto newParent = static_cast<cocos2d::CCNode*>(children.at(i));
             auto child = findFirstChildRecursive(newParent, predicate);
             if (child) return child;
         }
@@ -1071,9 +1069,9 @@ namespace geode::cocos {
     template <class K, class InpT, CocosObject T = std::remove_pointer_t<InpT>>
     struct CCDictIterator {
     public:
-        CCDictIterator(cocos2d::CCDictElement* p) : m_ptr(p) {}
+        CCDictIterator(cocos2d::DictElement* p) : m_ptr(p) {}
 
-        cocos2d::CCDictElement* m_ptr;
+        cocos2d::DictElement* m_ptr;
 
         std::pair<K, T*> operator*() {
             if constexpr (std::is_same_v<K, std::string> || std::is_same_v<K, gd::string>) {
@@ -1159,7 +1157,7 @@ namespace geode::cocos {
         }
 
         auto begin() {
-            return CCDictIterator<Key, ValuePtr>(m_dict->m_pElements);
+            return CCDictIterator<Key, ValuePtr>(m_dict->_elements);
         }
 
         // do not use this
@@ -1248,89 +1246,89 @@ namespace geode::cocos {
             return item;
         }
 
-        static CCMenuItemSpriteExtra* createSpriteExtra(
-            cocos2d::CCNode* normalSprite, 
-            std::function<void(CCMenuItemSpriteExtra*)> callback
-        ) {
-            auto item = CCMenuItemSpriteExtra::create(normalSprite, nullptr, nullptr);
-            assignCallback(item, std::move(callback));
-            return item;
-        }
+        // static CCMenuItemSpriteExtra* createSpriteExtra(
+        //     cocos2d::CCNode* normalSprite, 
+        //     std::function<void(CCMenuItemSpriteExtra*)> callback
+        // ) {
+        //     auto item = CCMenuItemSpriteExtra::create(normalSprite, nullptr, nullptr);
+        //     assignCallback(item, std::move(callback));
+        //     return item;
+        // }
 
-        static CCMenuItemSpriteExtra* createSpriteExtraWithFilename(
-            std::string_view normalSpriteName,
-            float scale,
-            std::function<void(CCMenuItemSpriteExtra*)> callback
-        ) {
-            auto sprite = cocos2d::CCSprite::create(normalSpriteName.data());
-            sprite->setScale(scale);
+        // static CCMenuItemSpriteExtra* createSpriteExtraWithFilename(
+        //     std::string_view normalSpriteName,
+        //     float scale,
+        //     std::function<void(CCMenuItemSpriteExtra*)> callback
+        // ) {
+        //     auto sprite = cocos2d::CCSprite::create(normalSpriteName.data());
+        //     sprite->setScale(scale);
 
-            return createSpriteExtra(sprite, std::move(callback));
-        }
+        //     return createSpriteExtra(sprite, std::move(callback));
+        // }
 
-        static CCMenuItemSpriteExtra* createSpriteExtraWithFrameName(
-            std::string_view normalSpriteName,
-            float scale,
-            std::function<void(CCMenuItemSpriteExtra*)> callback
-        ) {
-            auto sprite = cocos2d::CCSprite::createWithSpriteFrameName(normalSpriteName.data());
-            sprite->setScale(scale);
+        // static CCMenuItemSpriteExtra* createSpriteExtraWithFrameName(
+        //     std::string_view normalSpriteName,
+        //     float scale,
+        //     std::function<void(CCMenuItemSpriteExtra*)> callback
+        // ) {
+        //     auto sprite = cocos2d::CCSprite::createWithSpriteFrameName(normalSpriteName.data());
+        //     sprite->setScale(scale);
 
-            return createSpriteExtra(sprite, std::move(callback));
-        }
+        //     return createSpriteExtra(sprite, std::move(callback));
+        // }
 
-        static CCMenuItemToggler* createToggler(
-            cocos2d::CCNode* onSprite, 
-            cocos2d::CCNode* offSprite,
-            std::function<void(CCMenuItemToggler*)> callback
-        ) {
-            auto item = CCMenuItemToggler::create(offSprite, onSprite, nullptr, nullptr);
-            assignCallback(item, std::move(callback));
-            return item;
-        }
+        // static CCMenuItemToggler* createToggler(
+        //     cocos2d::CCNode* onSprite, 
+        //     cocos2d::CCNode* offSprite,
+        //     std::function<void(CCMenuItemToggler*)> callback
+        // ) {
+        //     auto item = CCMenuItemToggler::create(offSprite, onSprite, nullptr, nullptr);
+        //     assignCallback(item, std::move(callback));
+        //     return item;
+        // }
 
-        static CCMenuItemToggler* createTogglerWithStandardSprites(
-            float scale,
-            std::function<void(CCMenuItemToggler*)> callback
-        ) {
-            auto offSprite = cocos2d::CCSprite::createWithSpriteFrameName("GJ_checkOff_001.png");
-            auto onSprite = cocos2d::CCSprite::createWithSpriteFrameName("GJ_checkOn_001.png");
+        // static CCMenuItemToggler* createTogglerWithStandardSprites(
+        //     float scale,
+        //     std::function<void(CCMenuItemToggler*)> callback
+        // ) {
+        //     auto offSprite = cocos2d::CCSprite::createWithSpriteFrameName("GJ_checkOff_001.png");
+        //     auto onSprite = cocos2d::CCSprite::createWithSpriteFrameName("GJ_checkOn_001.png");
 
-            offSprite->setScale(scale);
-            onSprite->setScale(scale);
+        //     offSprite->setScale(scale);
+        //     onSprite->setScale(scale);
 
-            return createToggler(onSprite, offSprite, std::move(callback));
-        }
+        //     return createToggler(onSprite, offSprite, std::move(callback));
+        // }
 
-        static CCMenuItemToggler* createTogglerWithFilename(
-            std::string_view onSpriteName,
-            std::string_view offSpriteName,
-            float scale,
-            std::function<void(CCMenuItemToggler*)> callback
-        ) {
-            auto offSprite = cocos2d::CCSprite::create(offSpriteName.data());
-            auto onSprite = cocos2d::CCSprite::create(onSpriteName.data());
+        // static CCMenuItemToggler* createTogglerWithFilename(
+        //     std::string_view onSpriteName,
+        //     std::string_view offSpriteName,
+        //     float scale,
+        //     std::function<void(CCMenuItemToggler*)> callback
+        // ) {
+        //     auto offSprite = cocos2d::CCSprite::create(offSpriteName.data());
+        //     auto onSprite = cocos2d::CCSprite::create(onSpriteName.data());
 
-            offSprite->setScale(scale);
-            onSprite->setScale(scale);
+        //     offSprite->setScale(scale);
+        //     onSprite->setScale(scale);
 
-            return createToggler(onSprite, offSprite, std::move(callback));
-        }
+        //     return createToggler(onSprite, offSprite, std::move(callback));
+        // }
 
-        static CCMenuItemToggler* createTogglerWithFrameName(
-            std::string_view onSpriteName,
-            std::string_view offSpriteName,
-            float scale,
-            std::function<void(CCMenuItemToggler*)> callback
-        ) {
-            auto offSprite = cocos2d::CCSprite::createWithSpriteFrameName(offSpriteName.data());
-            auto onSprite = cocos2d::CCSprite::createWithSpriteFrameName(onSpriteName.data());
+        // static CCMenuItemToggler* createTogglerWithFrameName(
+        //     std::string_view onSpriteName,
+        //     std::string_view offSpriteName,
+        //     float scale,
+        //     std::function<void(CCMenuItemToggler*)> callback
+        // ) {
+        //     auto offSprite = cocos2d::CCSprite::createWithSpriteFrameName(offSpriteName.data());
+        //     auto onSprite = cocos2d::CCSprite::createWithSpriteFrameName(onSpriteName.data());
 
-            offSprite->setScale(scale);
-            onSprite->setScale(scale);
+        //     offSprite->setScale(scale);
+        //     onSprite->setScale(scale);
 
-            return createToggler(onSprite, offSprite, std::move(callback));
-        }
+        //     return createToggler(onSprite, offSprite, std::move(callback));
+        // }
 
         template <class Node>
         static void assignCallback(

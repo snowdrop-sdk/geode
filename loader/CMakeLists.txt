@@ -65,9 +65,9 @@ file(GLOB SOURCES CONFIGURE_DEPENDS
 	# src/cocos2d-ext/*.cpp
 	# src/cocos2d-ext/zip/*.cpp
 	src/core/*.cpp
-	src/hooks/*.cpp
-	src/ids/*.cpp
-	src/internal/*.cpp
+	# src/hooks/*.cpp
+	# src/ids/*.cpp
+	# src/internal/*.cpp
 	src/server/*.cpp
 	src/loader/*.cpp
 	src/load.cpp
@@ -356,7 +356,7 @@ elseif (WIN32)
 	set(LAUNCHER_TARGET ProxyLoader Updater)
 endif()
 
-add_subdirectory(test)
+# add_subdirectory(test)
 
 # Add install target on CLI >= 2.10.0 (which adds `geode profile path`)
 if (NOT GEODE_BUILDING_DOCS)

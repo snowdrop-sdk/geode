@@ -539,8 +539,8 @@ namespace geode {
         virtual void onCommit() = 0;
         virtual void onResetToDefault() = 0;
 
-        void onDescription(CCObject*);
-        void onReset(CCObject*);
+        void onDescription(cocos2d::CCObject*);
+        void onReset(cocos2d::CCObject*);
 
     public:
         void commit();

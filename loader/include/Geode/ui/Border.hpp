@@ -32,15 +32,15 @@ namespace geode {
         float getPaddingLeft();
         void setBackgroundColor(const cocos2d::ccColor4B& color);
         cocos2d::ccColor4B getBackgroundColor();
-        void setNode(CCNode* node);
-        CCNode* getNode();
+        void setNode(cocos2d::CCNode* node);
+        cocos2d::CCNode* getNode();
         void setSize(const cocos2d::CCSize& size);
     protected:
         Padding m_padding;
 
         Border(const cocos2d::CCPoint& padding = { 0, 0 });
         bool init(const cocos2d::ccColor4B& backgroundColor, const cocos2d::CCSize& size);
-        bool init(CCNode* node, const cocos2d::ccColor4B& backgroundColor, const cocos2d::CCSize& size);
+        bool init(cocos2d::CCNode* node, const cocos2d::ccColor4B& backgroundColor, const cocos2d::CCSize& size);
     private:
         void updatePadding();
     };

@@ -63,7 +63,7 @@ std::string geode::format_as(CCArray* arr) {
 
     if (arr && arr->count()) {
         for (int i = 0; i < arr->count(); ++i) {
-            out += format_as(arr->objectAtIndex(i));
+            out += format_as(arr.at(i));
             if (i < arr->count() - 1) out += ", ";
         }
     }

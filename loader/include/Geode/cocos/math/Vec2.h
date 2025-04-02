@@ -67,7 +67,7 @@ public:
     /**
      * Constructs a new vector initialized to all zeros.
      */
-    Vec2();
+    constexpr Vec2() : x(0), y(0) {}
 
     /**
      * Constructs a new vector initialized to the specified values.
@@ -97,12 +97,12 @@ public:
      *
      * @param copy The vector to copy.
      */
-    Vec2(const Vec2& copy);
+    constexpr Vec2(const Vec2& copy) : x(copy.x), y(copy.y) {}
 
     /**
      * Destructor.
      */
-    ~Vec2();
+    constexpr ~Vec2() {}
 
     /**
      * Indicates whether this vector contains all zeros.

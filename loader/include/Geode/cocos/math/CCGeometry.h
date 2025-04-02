@@ -62,9 +62,9 @@ public:
     @param other Copy constructor.
     @param point Conversion from a point.
      */
-    Size();
+    constexpr Size() : width(0), height(0) {}
     Size(float width, float height);
-    Size(const Size& other);
+    constexpr Size(const Size& other) : width(other.width), height(other.height) {}
     explicit Size(const Vec2& point);
     /**@}*/
 
@@ -127,7 +127,7 @@ public:
     Constructor an empty Rect.
      * @js NA
      */
-    Rect();
+    constexpr Rect() : origin(Vec2::ZERO), size(Size::ZERO) {}
     /**
     Constructor a rect.
      * @js NA
@@ -143,7 +143,7 @@ public:
      * @js NA
      * @lua NA
      */
-    Rect(const Rect& other);
+    constexpr Rect(const Rect& other) : origin(other.origin), size(other.size) {}
     /**
      * @js NA
      * @lua NA

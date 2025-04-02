@@ -6,10 +6,6 @@
 #include <cocos2d.h>
 #include <vector>
 
-namespace cocos2d {
-    class CCNode;
-}
-
 namespace geode {
     template <class, class>
     class Modify;

@@ -57,7 +57,7 @@ namespace geode::node_ids {
     }
 
     static void switchChildToMenu(CCNode* parent, int idx, CCNode* menu) {
-        switchToMenu(static_cast<CCNode*>(parent->getChildren()->objectAtIndex(idx)), menu);
+        switchToMenu(static_cast<CCNode*>(parent->getChildren().at(idx)), menu);
     }
 
     template <typename ...Args>

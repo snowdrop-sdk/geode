@@ -22,10 +22,10 @@
 
 NS_CC_MATH_BEGIN
 
-inline Vec2::Vec2()
-: x(0.0f), y(0.0f)
-{
-}
+// inline Vec2::Vec2()
+// : x(0.0f), y(0.0f)
+// {
+// }
 
 inline Vec2::Vec2(float xx, float yy)
 : x(xx), y(yy)
@@ -42,14 +42,14 @@ inline Vec2::Vec2(const Vec2& p1, const Vec2& p2)
     set(p1, p2);
 }
 
-inline Vec2::Vec2(const Vec2& copy)
-{
-    set(copy);
-}
+// inline Vec2::Vec2(const Vec2& copy)
+// {
+//     set(copy);
+// }
 
-inline Vec2::~Vec2()
-{
-}
+// inline Vec2::~Vec2()
+// {
+// }
 
 inline bool Vec2::isZero() const
 {

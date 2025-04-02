@@ -679,7 +679,7 @@ bool CCArray::isEqualToArray(CCArray* otherArray)
 {
     for (unsigned int i = 0; i< this->count(); i++)
     {
-        if (!this->objectAtIndex(i)->isEqual(otherArray->objectAtIndex(i)))
+        if (!this.at(i)->isEqual(otherArray.at(i)))
         {
             return false;
         }

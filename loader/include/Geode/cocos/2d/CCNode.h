@@ -42,6 +42,15 @@
 #include "physics/CCPhysicsBody.h"
 #endif
 
+#include <Geode/loader/Event.hpp>
+#include <Geode/utils/casts.hpp>
+
+namespace geode {
+    class Layout;
+    class LayoutOptions;
+    enum class Anchor;
+}
+
 NS_CC_BEGIN
 
 class GridBase;
@@ -1187,6 +1196,254 @@ public:
      * @return The event dispatcher of scene.
      */
     virtual EventDispatcher* getEventDispatcher() const { return _eventDispatcher; };
+
+    
+    /**
+     * Set a user-assigned CCObject with a specific ID. This allows nodes to 
+     * have multiple user objects. Objects should be prefixed with the mod ID. 
+     * Assigning a null removes the user object with the ID
+     * 
+     * @note Geode addition
+     */
+    GEODE_DLL void setUserObject(std::string const& id, Ref* object);
+
+    /**
+     * Get a user-assigned CCObject with the specific ID
+     * 
+     * @note Geode addition
+     */
+    GEODE_DLL Ref* getUserObject(std::string const& id);
+    
+    /// @} end of Tag & User Data
+    
+private:
+    friend class geode::modifier::FieldContainer;
+
+    GEODE_DLL geode::modifier::FieldContainer* getFieldContainer(char const* forClass);
+    GEODE_DLL void addEventListenerInternal(
+        std::string const& id,
+        geode::EventListenerProtocol* protocol
+    );
+
+public: 
+    /**
+     * Get the string ID of this node
+     * @returns The ID, or an empty string if the node has no ID.
+     * @note Geode addition
+     */
+    GEODE_DLL const std::string& getID();
+    /**
+     * Set the string ID of this node. String IDs are a Geode addition 
+     * that are much safer to use to get nodes than absolute indexes
+     * @param id The ID of the node, recommended to be in kebab case 
+     * without any spaces or uppercase letters. If the node is added 
+     * by a mod, use the _spr literal to append the mod ID to it
+     * @note Geode addition
+     */
+    GEODE_DLL void setID(std::string const& id);
+
+    /**
+     * Set the string ID of this node. String IDs are a Geode addition 
+     * that are much safer to use to get nodes than absolute indexes
+     * @param id The ID of the node, recommended to be in kebab case 
+     * without any spaces or uppercase letters. If the node is added 
+     * by a mod, use the _spr literal to append the mod ID to it
+     * @note Geode addition
+     */
+    GEODE_DLL void setID(std::string&& id);
+
+    /**
+     * Get a child by its string ID
+     * @param id ID of the child
+     * @returns The child, or nullptr if none was found
+     * @note Geode addition
+     */
+    GEODE_DLL Node* getChildByID(std::string_view id);
+
+    /**
+     * Get a child by its string ID. Recursively searches all the children
+     * @param id ID of the child
+     * @returns The child, or nullptr if none was found
+     * @note Geode addition
+     */
+    GEODE_DLL Node* getChildByIDRecursive(std::string_view id);
+
+    /**
+     * Get a child based on a query. Searches the child tree for a matching 
+     * child. The query currently only supports the following features:
+     *  - `node-id`: Match a node with a specific ID
+     *  - `node-id-1 node-id-2`: Match a descendant (possibly not immediate) 
+     *    child of a node with a specific ID
+     *  - `node-id-1 > node-id-2`: Match the immediate child of a node with a 
+     *    specific ID 
+     * For example, the query "my-layer button-menu > mod.id/epic-button" is 
+     * equivalent to `getChildByIDRecursive("my-layer")
+     * ->getChildByIDRecursive("button-menu")
+     * ->getChildByID("mod.id/epic-button")`
+     * @returns The first matching node, or nullptr if none was found
+     */
+    GEODE_DLL Node* querySelector(std::string_view query);
+
+    /** 
+     * Removes a child from the container by its ID.
+     * @param id The ID of the node
+     * @note Geode addition
+     */
+    GEODE_DLL void removeChildByID(std::string_view id);
+
+    /**
+     * Add a child before a specified existing child
+     * @param child The node to add. The node may not be a child of another  
+     * node already
+     * @param before The child the node is added before of. If this is null or 
+     * not a child of this node, the new child will be placed at the start of the 
+     * child list
+     * @note Geode addition
+     */
+    GEODE_DLL void insertBefore(Node* child, Node* before);
+
+    /**
+     * Add a child after an specified existing child
+     * @param child The node to add. The node may not be a child of another  
+     * node already
+     * @param after The child the node is added after of. If this is null or 
+     * not a child of this node, the new child will be placed at the end of the 
+     * child list
+     * @note Geode addition
+     */
+    GEODE_DLL void insertAfter(Node* child, Node* after);
+
+    /**
+     * Check if this node's parent or its parents' parent is the given node
+     * @param ancestor The node whose child or subchild this node should be. If 
+     * nullptr, returns true if the node is in the current scene, otherwise 
+     * false.
+     * @returns True if ancestor is an ancestor of this node
+     * @note Geode addition
+     */
+    GEODE_DLL bool hasAncestor(Node* ancestor);
+
+    /**
+     * Set the Layout for this node. Used to automatically position children, 
+     * based on the selected layout. In order to apply the layout after a child 
+     * has been added, call updateLayout
+     * @param layout Layout to set to this node
+     * @param apply Whether to call updateLayout now or not
+     * @param respectAnchor If true, if the target node is 
+     * isIgnoreAnchorPointForPosition, then it is set to false and the children 
+     * are automatically moved to match where they should be positioned. 
+     * Visually, this should result in no difference; however, when dealing with 
+     * CCLayers / CCMenus, this will change where the children are located
+     * @note Geode addition
+     */
+    GEODE_DLL void setLayout(geode::Layout* layout, bool apply = true, bool respectAnchor = true);
+    /**
+     * Get the Layout for this node
+     * @returns The current layout, or nullptr if no layout is set
+     * @note Geode addition
+     */
+    GEODE_DLL geode::Layout* getLayout();
+    /**
+     * Update the layout of this node using the current Layout. If no layout is 
+     * set, nothing happens
+     * @note Geode addition
+     */
+    GEODE_DLL void updateLayout(bool updateChildOrder = true);
+    /**
+     * Set the layout options for this node. Layout options can be used to 
+     * control how this node is positioned in its parent's Layout, for example 
+     * setting the grow size for a flex layout
+     * @param options The layout options
+     * @param apply Whether to update the layout of the parent node
+     * @note Geode addition
+     */
+    GEODE_DLL void setLayoutOptions(geode::LayoutOptions* options, bool apply = true);
+    /**
+     * Get the layout options for this node
+     * @returns The current layout options, or nullptr if no options are set
+     * @note Geode addition
+     */
+    GEODE_DLL geode::LayoutOptions* getLayoutOptions();
+    /**
+     * Adds a child at an anchored position with an offset. The node is placed 
+     * in its parent where the anchor specifies, and then the offset is used to 
+     * relatively adjust the node's position
+     * @param child The child to add
+     * @param anchor Where the place the child relative to this node
+     * @param offset Where to place the child relative to the anchor
+     * @param useAnchorLayout If true, sets this node's layout to `AnchorLayout` 
+     * if no other layout is already specified
+     * @note Geode addition
+     */
+    GEODE_DLL void addChildAtPosition(Node* child, geode::Anchor anchor, Vec2 const& offset = Vec2::ZERO, bool useAnchorLayout = true);
+    /**
+     * Adds a child at an anchored position with an offset. The node is placed 
+     * in its parent where the anchor specifies, and then the offset is used to 
+     * relatively adjust the node's position
+     * @param child The child to add
+     * @param anchor Where the place the child relative to this node
+     * @param offset Where to place the child relative to the anchor
+     * @param nodeAnchor The child's anchor position
+     * @param useAnchorLayout If true, sets this node's layout to `AnchorLayout` 
+     * if no other layout is already specified
+     * @note Geode addition
+     */
+    GEODE_DLL void addChildAtPosition(
+        Node* child,
+        geode::Anchor anchor,
+        Vec2 const& offset,
+        Vec2 const& nodeAnchor,
+        bool useAnchorLayout = true
+    );
+    /**
+     * Updates the anchored position of a child. Requires the child to already 
+     * have a parent; if the child already has AnchorLayoutOptions set, those 
+     * are updated, otherwise nothing is done
+     * @param anchor Where the place the child relative to its parent
+     * @param offset Where to place the child relative to the anchor
+     * @note Geode addition
+     */
+    GEODE_DLL void updateAnchoredPosition(geode::Anchor anchor, Vec2 const& offset = Vec2::ZERO);
+    /**
+     * Updates the anchored position of a child. Requires the child to already 
+     * have a parent; if the child already has AnchorLayoutOptions set, those 
+     * are updated, otherwise nothing is done
+     * @param anchor Where the place the child relative to its parent
+     * @param offset Where to place the child relative to the anchor
+     * @param nodeAnchor The child's anchor position
+     * @note Geode addition
+     */
+    GEODE_DLL void updateAnchoredPosition(
+        geode::Anchor anchor,
+        Vec2 const& offset,
+        Vec2 const& nodeAnchor
+    );
+
+    /**
+     * Swap two children
+     * @param first One of the nodes to swap
+     * @param second One of the nodes to swap
+     * @note Geode addition
+     */
+    GEODE_DLL void swapChildIndices(Node* first, Node* second);
+
+    /**
+     * @note Make sure to set the scale first!
+     * @note Geode addition
+     */
+    GEODE_DLL void setScaledContentSize(Size const& size);
+    // @note Geode addition
+    GEODE_DLL void setContentWidth(float width);
+    // @note Geode addition
+    GEODE_DLL void setContentHeight(float width);
+    // @note Geode addition
+    GEODE_DLL float getContentWidth() const;
+    // @note Geode addition
+    GEODE_DLL float getContentHeight() const;
+    // @note Geode addition
+    GEODE_DLL float getScaledContentWidth() const;
+    // @note Geode addition
+    GEODE_DLL float getScaledContentHeight() const;
 
     /// @{
     /// @name Actions
