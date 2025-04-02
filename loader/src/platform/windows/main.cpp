@@ -157,14 +157,14 @@ int WINAPI gdMainHook(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmd
 
     fixCurrentWorkingDirectory();
 
-    if (versionToTimestamp(GEODE_STR(GEODE_GD_VERSION)) > gdTimestamp) {
+    if (versionToTimestamp(GEODE_STR(GEODE_GAME_VERSION)) > gdTimestamp) {
         console::messageBox(
             "Unable to Load Geode!",
             fmt::format(
                 "This version of Geode is made for Geometry Dash {} "
                 "but you're trying to play with GD {}.\n"
                 "Please, update your game.",
-                GEODE_STR(GEODE_GD_VERSION),
+                GEODE_STR(GEODE_GAME_VERSION),
                 LoaderImpl::get()->getGameVersion()
             )
         );

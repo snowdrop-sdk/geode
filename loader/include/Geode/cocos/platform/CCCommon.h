@@ -1,5 +1,6 @@
 /****************************************************************************
-Copyright (c) 2010 cocos2d-x.org
+Copyright (c) 2010-2012 cocos2d-x.org
+Copyright (c) 2013-2015 Chukong Technologies Inc.
 
 http://www.cocos2d-x.org
 
@@ -24,8 +25,9 @@ THE SOFTWARE.
 
 #ifndef __CC_COMMON_H__
 #define __CC_COMMON_H__
+/// @cond DO_NOT_SHOW
 
-#include "CCPlatformMacros.h"
+#include "platform/CCPlatformMacros.h"
 
 NS_CC_BEGIN
 
@@ -34,47 +36,46 @@ NS_CC_BEGIN
  * @{
  */
 
-/// The max length of CCLog message.
-static const int kMaxLogLen = 16*1024;
-
-/**
-@brief Output Debug message.
-*/
-void CC_DLL CCLog(const char * pszFormat, ...) CC_FORMAT_PRINTF(1, 2);
-
 /**
  * lua can not deal with ...
  */
-void CC_DLL CCLuaLog(const char * pszFormat);
+void CC_DLL LuaLog(const char * format);
 
 /**
 @brief Pop out a message box
 */
-void CC_DLL CCMessageBox(const char * pszMsg, const char * pszTitle);
+void CC_DLL MessageBox(const char * msg, const char * title);
 
 /**
 @brief Enum the language type supported now
 */
-typedef enum LanguageType
+enum class LanguageType
 {
-    kLanguageEnglish = 0,
-    kLanguageChinese,
-    kLanguageFrench,
-    kLanguageItalian,
-    kLanguageGerman,
-    kLanguageSpanish,
-    kLanguageDutch,
-    kLanguageRussian,
-    kLanguageKorean,
-    kLanguageJapanese,
-    kLanguageHungarian,
-    kLanguagePortuguese,
-    kLanguageArabic
-} ccLanguageType;
+    ENGLISH = 0,
+    CHINESE,
+    FRENCH,
+    ITALIAN,
+    GERMAN,
+    SPANISH,
+    DUTCH,
+    RUSSIAN,
+    KOREAN,
+    JAPANESE,
+    HUNGARIAN,
+    PORTUGUESE,
+    ARABIC,
+    NORWEGIAN,
+    POLISH,
+    TURKISH,
+    UKRAINIAN,
+    ROMANIAN,
+    BULGARIAN
+};
 
-// end of platform group
+// END of platform group
 /// @}
 
 NS_CC_END
 
+/// @endcond
 #endif    // __CC_COMMON_H__

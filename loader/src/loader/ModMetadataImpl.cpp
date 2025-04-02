@@ -639,17 +639,17 @@ Result<> ModMetadata::checkGameVersion() const {
         }
 
         if (LoaderImpl::get()->isForwardCompatMode()) {
-            // this means current gd version is > GEODE_GD_VERSION
-            if (modTargetVer <= GEODE_GD_VERSION) {
+            // this means current gd version is > GEODE_GAME_VERSION
+            if (modTargetVer <= GEODE_GAME_VERSION) {
                 return Err(fmt::format("This mod doesn't support this version of Geometry Dash ({})", ver));
             }
-        } else if (ver != GEODE_STR(GEODE_GD_VERSION)) {
-            // we are not in forward compat mode, so GEODE_GD_VERSION is the current gd version
+        } else if (ver != GEODE_STR(GEODE_GAME_VERSION)) {
+            // we are not in forward compat mode, so GEODE_GAME_VERSION is the current gd version
             return Err(
                 fmt::format(
                     "This mod was created for a different version of Geometry Dash ({}). You currently have version {}.",
                     ver,
-                    GEODE_STR(GEODE_GD_VERSION)
+                    GEODE_STR(GEODE_GAME_VERSION)
                 )
             );
         }

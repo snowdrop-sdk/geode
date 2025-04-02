@@ -1,5 +1,6 @@
 /****************************************************************************
 Copyright (c) 2012 cocos2d-x.org
+Copyright (c) 2013-2014 Chukong Technologies Inc.
 
 http://www.cocos2d-x.org
 
@@ -27,6 +28,6 @@ THE SOFTWARE.
 #include <string>
 
 int getFontSizeAccordingHeightJni(int height);
-gd::string getStringWithEllipsisJni(const char* pszText, float width, float fontSize);
+std::string getStringWithEllipsisJni(const char* text, float width, float fontSize);
 
 #endif // __EDITBOX_JNI_H__

@@ -41,7 +41,7 @@ $execute {
     // hook them to call our own handler
     if (LoaderImpl::get()->isForwardCompatMode()) return;
 
-#if GEODE_COMP_GD_VERSION == 22074
+#if GEODE_COMP_GAME_VERSION == 22074
     const uintptr_t offset1 = 0x75D90; // member function in CCEGLView
     const uintptr_t offset2 = 0x75DF0; // static function
     

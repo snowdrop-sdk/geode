@@ -1,5 +1,5 @@
 /****************************************************************************
- Copyright (c) 2010 cocos2d-x.org  http://cocos2d-x.org
+ Copyright (c) 2010 cocos2d-x.org
  Copyright (c) 2010 Максим Аксенов
  
  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,9 +23,11 @@
 
 #ifndef __CCSAXPARSER_H__
 #define __CCSAXPARSER_H__
+/// @cond DO_NOT_SHOW
 
-#include "CCPlatformConfig.h"
-#include "CCCommon.h"
+#include "platform/CCPlatformConfig.h"
+#include "platform/CCCommon.h"
+#include <string>
 
 NS_CC_BEGIN
 
@@ -36,40 +38,76 @@ NS_CC_BEGIN
 
 typedef unsigned char CC_XML_CHAR;
 
-/**
- * @js NA
- * @lua NA
- */
-class CC_DLL CCSAXDelegator
+class CC_DLL SAXDelegator
 {
-    GEODE_FRIEND_MODIFY
 public:
+    virtual ~SAXDelegator() {}
+
+    /**
+     * @js NA
+     * @lua NA
+     */
     virtual void startElement(void *ctx, const char *name, const char **atts) = 0;
+    /**
+     * @js NA
+     * @lua NA
+     */
     virtual void endElement(void *ctx, const char *name) = 0;
+    /**
+     * @js NA
+     * @lua NA
+     */
     virtual void textHandler(void *ctx, const char *s, int len) = 0;
 };
 
-/**
- * @js NA
- * @lua NA
- */
-class CC_DLL CCSAXParser
+class CC_DLL SAXParser
 {
-    GEODE_FRIEND_MODIFY
-    CCSAXDelegator*    m_pDelegator;
+    SAXDelegator*    _delegator;
 public:
-
-    GEODE_CUSTOM_CONSTRUCTOR_BEGIN(CCSAXParser)
-    CCSAXParser();
-    ~CCSAXParser(void);
-
-    bool init(const char *pszEncoding);
-    bool parse(const char* pXMLData, unsigned int uDataLength);
-    bool parse(const char *pszFile);
-    void setDelegator(CCSAXDelegator* pDelegator);
-
+    /**
+     * @js NA
+     * @lua NA
+     */
+    SAXParser();
+    /**
+     * @js NA
+     * @lua NA
+     */
+    ~SAXParser(void);
+    /**
+     * @js NA
+     * @lua NA
+     */
+    bool init(const char *encoding);
+    /**
+     * @js NA
+     * @lua NA
+     */
+    bool parse(const char* xmlData, size_t dataLength);
+    /**
+     * @js NA
+     * @lua NA
+     */
+    bool parse(const std::string& filename);
+    /**
+     * @js NA
+     * @lua NA
+     */
+    void setDelegator(SAXDelegator* delegator);
+    /**
+     * @js NA
+     * @lua NA
+     */
     static void startElement(void *ctx, const CC_XML_CHAR *name, const CC_XML_CHAR **atts);
+    /**
+     * @js NA
+     * @lua NA
+     */
     static void endElement(void *ctx, const CC_XML_CHAR *name);
+    /**
+     * @js NA
+     * @lua NA
+     */
     static void textHandler(void *ctx, const CC_XML_CHAR *name, int len);
 };
 
@@ -78,4 +116,5 @@ public:
 
 NS_CC_END
 
+/// @endcond
 #endif //__CCSAXPARSER_H__

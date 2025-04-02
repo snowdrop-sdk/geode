@@ -1,5 +1,6 @@
 /****************************************************************************
-Copyright (c) 2010 cocos2d-x.org
+Copyright (c) 2010-2012 cocos2d-x.org
+Copyright (c) 2013-2015 Chukong Technologies Inc.
 
 http://www.cocos2d-x.org
 
@@ -24,9 +25,9 @@ THE SOFTWARE.
 
 #ifndef __CC_PLATFORM_THREAD_H__
 #define __CC_PLATFORM_THREAD_H__
+/// @cond DO_NOT_SHOW
 
-#include "CCCommon.h"
-#include "CCPlatformMacros.h"
+#include "platform/CCPlatformMacros.h"
 
 NS_CC_BEGIN
 
@@ -37,21 +38,23 @@ NS_CC_BEGIN
 
 /* On iOS, should create autorelease pool when create a new thread
  * and release it when the thread end.
- * @js NA
- * @lua NA
  */
-class CC_DLL CCThread
+
+class CC_DLL ThreadHelper
 {
-    GEODE_FRIEND_MODIFY
 public:
-    GEODE_CUSTOM_CONSTRUCTOR_BEGIN(CCThread)
-    CCThread() : m_pAutoreasePool(0) {}
-    ~CCThread();
 
-    void createAutoreleasePool();
-
-private:
-    void *m_pAutoreasePool;
+    /** Create an autorelease pool for objective-c codes.
+     * @js NA
+     * @lua NA
+     */
+    static void* createAutoreleasePool();
+    
+    /**
+     * @js NA
+     * @lua NA
+    */
+    static void releaseAutoreleasePool(void *autoreleasePool);
 };
 
 // end of platform group
@@ -59,4 +62,5 @@ private:
 
 NS_CC_END
 
+/// @endcond
 #endif    // __CC_PLATFORM_THREAD_H__

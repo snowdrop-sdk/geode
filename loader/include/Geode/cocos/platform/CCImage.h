@@ -1,5 +1,6 @@
 /****************************************************************************
-Copyright (c) 2010 cocos2d-x.org
+Copyright (c) 2010-2012 cocos2d-x.org
+Copyright (c) 2013-2015 Chukong Technologies Inc.
 
 http://www.cocos2d-x.org
 
@@ -24,186 +25,211 @@ THE SOFTWARE.
 
 #ifndef __CC_IMAGE_H__
 #define __CC_IMAGE_H__
+/// @cond DO_NOT_SHOW
 
-#include "../cocoa/CCObject.h"
+#include "base/CCRef.h"
+#include "renderer/CCTexture2D.h"
+
+#if CC_USE_WIC
+#include "platform/winrt/WICImageLoader-winrt.h"
+#endif
+
+// premultiply alpha, or the effect will wrong when want to use other pixel format in Texture2D,
+// such as RGB888, RGB5A1
+#define CC_RGB_PREMULTIPLY_ALPHA(vr, vg, vb, va) \
+    (unsigned)(((unsigned)((unsigned char)(vr) * ((unsigned char)(va) + 1)) >> 8) | \
+    ((unsigned)((unsigned char)(vg) * ((unsigned char)(va) + 1) >> 8) << 8) | \
+    ((unsigned)((unsigned char)(vb) * ((unsigned char)(va) + 1) >> 8) << 16) | \
+    ((unsigned)(unsigned char)(va) << 24))
 
 NS_CC_BEGIN
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT) || (CC_TARGET_PLATFORM == CC_PLATFORM_WP8)
-class CCFreeTypeFont;
-#endif
 
 /**
  * @addtogroup platform
  * @{
  */
 
-class CC_DLL CCImage : public CCObject
+/**
+ @brief Structure which can tell where mipmap begins and how long is it
+ */
+typedef struct _MipmapInfo
 {
-    GEODE_FRIEND_MODIFY
+    unsigned char* address;
+    int len;
+    _MipmapInfo():address(NULL),len(0){}
+}MipmapInfo;
+
+class CC_DLL Image : public Ref
+{
 public:
+    friend class TextureCache;
     /**
-     @js ctor
+     * @js ctor
      */
-    CCImage();
-    GEODE_CUSTOM_CONSTRUCTOR_COCOS(CCImage, CCObject)
+    Image();
     /**
      * @js NA
      * @lua NA
      */
-    ~CCImage();
+    virtual ~Image();
 
-    typedef enum
+    /** Supported formats for Image */
+    enum class Format
     {
-        kFmtJpg = 0,
-        kFmtPng,
-        kFmtTiff,
-        kFmtWebp,
-        kFmtRawData,
-        kFmtUnKnown
-    }EImageFormat;
+        //! JPEG
+        JPG,
+        //! PNG
+        PNG,
+        //! TIFF
+        TIFF,
+        //! WebP
+        WEBP,
+        //! PVR
+        PVR,
+        //! ETC
+        ETC,
+        //! S3TC
+        S3TC,
+        //! ATITC
+        ATITC,
+        //! TGA
+        TGA,
+        //! Raw Data
+        RAW_DATA,
+        //! Unknown format
+        UNKNOWN
+    };
 
-    typedef enum
-    {
-        kAlignCenter        = 0x33, ///< Horizontal center and vertical center.
-        kAlignTop           = 0x13, ///< Horizontal center and vertical top.
-        kAlignTopRight      = 0x12, ///< Horizontal right and vertical top.
-        kAlignRight         = 0x32, ///< Horizontal right and vertical center.
-        kAlignBottomRight   = 0x22, ///< Horizontal right and vertical bottom.
-        kAlignBottom        = 0x23, ///< Horizontal center and vertical bottom.
-        kAlignBottomLeft    = 0x21, ///< Horizontal left and vertical bottom.
-        kAlignLeft          = 0x31, ///< Horizontal left and vertical center.
-        kAlignTopLeft       = 0x11, ///< Horizontal left and vertical top.
-    }ETextAlign;
-    
     /**
-    @brief  Load the image from the specified path. 
-    @param strPath   the absolute file path.
-    @param imageType the type of image, currently only supporting two types.
-    @return  true if loaded correctly.
-    */
-    bool initWithImageFile(const char * strPath, EImageFormat imageType = kFmtPng);
+     * Enables or disables premultiplied alpha for PNG files.
+     *
+     *  @param enabled (default: true)
+     */
+    static void setPNGPremultipliedAlphaEnabled(bool enabled) { PNG_PREMULTIPLIED_ALPHA_ENABLED = enabled; }
+    
+    /** treats (or not) PVR files as if they have alpha premultiplied.
+     Since it is impossible to know at runtime if the PVR images have the alpha channel premultiplied, it is
+     possible load them as if they have (or not) the alpha channel premultiplied.
+     
+     By default it is disabled.
+     */
+    static void setPVRImagesHavePremultipliedAlpha(bool haveAlphaPremultiplied);
 
+    /**
+    @brief Load the image from the specified path.
+    @param path   the absolute file path.
+    @return true if loaded correctly.
+    */
+    bool initWithImageFile(const std::string& path);
+
+    /**
+    @brief Load image from stream buffer.
+    @param data  stream buffer which holds the image data.
+    @param dataLen  data length expressed in (number of) bytes.
+    @return true if loaded correctly.
+    * @js NA
+    * @lua NA
+    */
+    bool initWithImageData(const unsigned char * data, ssize_t dataLen);
+
+    // @warning kFmtRawData only support RGBA8888
+    bool initWithRawData(const unsigned char * data, ssize_t dataLen, int width, int height, int bitsPerComponent, bool preMulti = false);
+
+    // Getters
+    inline unsigned char *   getData()               { return _data; }
+    inline ssize_t           getDataLen()            { return _dataLen; }
+    inline Format            getFileType()           {return _fileType; }
+    inline Texture2D::PixelFormat getRenderFormat()  { return _renderFormat; }
+    inline int               getWidth()              { return _width; }
+    inline int               getHeight()             { return _height; }
+    inline int               getNumberOfMipmaps()    { return _numberOfMipmaps; }
+    inline MipmapInfo*       getMipmaps()            { return _mipmaps; }
+    inline bool              hasPremultipliedAlpha() { return _hasPremultipliedAlpha; }
+    CC_DEPRECATED_ATTRIBUTE inline bool isPremultipliedAlpha()  { return _hasPremultipliedAlpha;   }
+    inline std::string getFilePath() const { return _filePath; }
+
+    int                      getBitPerPixel();
+    bool                     hasAlpha();
+    bool                     isCompressed();
+
+
+    /**
+     @brief    Save Image data to the specified file, with specified format.
+     @param    filePath        the file's absolute path, including file suffix.
+     @param    isToRGB        whether the image is saved as RGB format.
+     */
+    bool saveToFile(const std::string &filename, bool isToRGB = true);
+
+protected:
+#if CC_USE_WIC
+    bool encodeWithWIC(const std::string& filePath, bool isToRGB, GUID containerFormat);
+    bool decodeWithWIC(const unsigned char *data, ssize_t dataLen);
+#endif
+    bool initWithJpgData(const unsigned char *  data, ssize_t dataLen);
+    bool initWithPngData(const unsigned char * data, ssize_t dataLen);
+    bool initWithTiffData(const unsigned char * data, ssize_t dataLen);
+    bool initWithWebpData(const unsigned char * data, ssize_t dataLen);
+    bool initWithPVRData(const unsigned char * data, ssize_t dataLen);
+    bool initWithPVRv2Data(const unsigned char * data, ssize_t dataLen);
+    bool initWithPVRv3Data(const unsigned char * data, ssize_t dataLen);
+    bool initWithETCData(const unsigned char * data, ssize_t dataLen);
+    bool initWithS3TCData(const unsigned char * data, ssize_t dataLen);
+    bool initWithATITCData(const unsigned char *data, ssize_t dataLen);
+    typedef struct sImageTGA tImageTGA;
+    bool initWithTGAData(tImageTGA* tgaData);
+
+    bool saveImageToPNG(const std::string& filePath, bool isToRGB = true);
+    bool saveImageToJPG(const std::string& filePath);
+    
+    void premultipliedAlpha();
+    
+protected:
+    /**
+     @brief Determine how many mipmaps can we have.
+     It's same as define but it respects namespaces
+     */
+    static const int MIPMAP_MAX = 16;
+    /**
+     @brief Determine whether we premultiply alpha for png files.
+     */
+    static bool PNG_PREMULTIPLIED_ALPHA_ENABLED;
+    unsigned char *_data;
+    ssize_t _dataLen;
+    int _width;
+    int _height;
+    bool _unpack;
+    Format _fileType;
+    Texture2D::PixelFormat _renderFormat;
+    MipmapInfo _mipmaps[MIPMAP_MAX];   // pointer to mipmap images
+    int _numberOfMipmaps;
+    // false if we can't auto detect the image is premultiplied or not.
+    bool _hasPremultipliedAlpha;
+    std::string _filePath;
+
+
+protected:
+    // noncopyable
+    Image(const Image& rImg);
+    Image& operator=(const Image&);
+    
     /*
      @brief The same result as with initWithImageFile, but thread safe. It is caused by
-            loadImage() in CCTextureCache.cpp.
+     loadImage() in TextureCache.cpp.
      @param fullpath  full path of the file.
      @param imageType the type of image, currently only supporting two types.
      @return  true if loaded correctly.
      */
-    bool initWithImageFileThreadSafe(const char *fullpath, EImageFormat imageType = kFmtPng);
-
-    /**
-    @brief  Load image from stream buffer.
-
-    @warning kFmtRawData only supports RGBA8888.
-    @param pBuffer  stream buffer which holds the image data.
-    @param nLength  data length expressed in (number of) bytes.
-    @param nWidth, nHeight, nBitsPerComponent are used for kFmtRawData.
-    @return true if loaded correctly.
-    @js NA
-    */
-    bool initWithImageData(void * pData, 
-                           int nDataLen, 
-                           EImageFormat eFmt = kFmtUnKnown,
-                           int nWidth = 0,
-                           int nHeight = 0,
-                           int nBitsPerComponent = 8,
-                           int whoknows = 0);
-
-    /**
-    @brief    Create image with specified string.
-    @param  pText       the text the image will show (cannot be nil).
-    @param  nWidth      the image width, if 0, the width will match the text's width.
-    @param  nHeight     the image height, if 0, the height will match the text's height.
-    @param  eAlignMask  the test Alignment
-    @param  pFontName   the name of the font used to draw the text. If nil, use the default system font.
-    @param  nSize       the font size, if 0, use the system default size.
-    @js NA
-    */
-    bool initWithString(
-        const char *    pText, 
-        int             nWidth = 0, 
-        int             nHeight = 0,
-        ETextAlign      eAlignMask = kAlignCenter,
-        const char *    pFontName = 0,
-        int             nSize = 0);
+    bool initWithImageFileThreadSafe(const std::string& fullpath);
     
-    #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) || (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-        /**
-         * @js NA
-         * @lua NA
-         */
-        bool initWithStringShadowStroke(
-                                            const char *    pText,
-                                            int             nWidth      = 0,
-                                            int             nHeight     = 0,
-                                            ETextAlign      eAlignMask  = kAlignCenter,
-                                            const char *    pFontName   = 0,
-                                            int             nSize       = 0,
-                                            float           textTintR   = 1,
-                                            float           textTintG   = 1,
-                                            float           textTintB   = 1,
-                                            bool shadow                 = false,
-                                            float shadowOffsetX         = 0.0,
-                                            float shadowOffsetY         = 0.0,
-                                            float shadowOpacity         = 0.0,
-                                            float shadowBlur            = 0.0,
-                                            bool  stroke                =  false,
-                                            float strokeR               = 1,
-                                            float strokeG               = 1,
-                                            float strokeB               = 1,
-                                            float strokeSize            = 1
-                                        
-                                        );
-    
-    #endif
-    
-
-    unsigned char *   getData()               { return m_pData; }
-    int               getDataLen()            { return m_nWidth * m_nHeight; }
-
-
-    bool hasAlpha()                     { return m_bHasAlpha;   }
-    bool isPremultipliedAlpha()         { return m_bPreMulti;   }
-
-
-    /**
-    @brief    Save CCImage data to the specified file, with specified format.
-    @param    pszFilePath        the file's absolute path, including file suffix.
-    @param    bIsToRGB        whether the image is saved as RGB format.
-    */
-    bool saveToFile(const char *pszFilePath, bool bIsToRGB = true);
-
-    CC_SYNTHESIZE_READONLY_NV(unsigned short,   m_nWidth,       Width);
-    CC_SYNTHESIZE_READONLY_NV(unsigned short,   m_nHeight,      Height);
-    CC_SYNTHESIZE_READONLY_NV(int,     m_nBitsPerComponent,   BitsPerComponent);
-
-protected:
-    bool _initWithJpgData(void *pData, int nDatalen);
-    bool _initWithPngData(void *pData, int nDatalen);
-    bool _initWithTiffData(void *pData, int nDataLen);
-    bool _initWithWebpData(void *pData, int nDataLen);
-    // @warning kFmtRawData only support RGBA8888
-    bool _initWithRawData(void *pData, int nDatalen, int nWidth, int nHeight, int nBitsPerComponent, bool bPreMulti);
-
-    bool _saveImageToPNG(const char *pszFilePath, bool bIsToRGB = true);
-    bool _saveImageToJPG(const char *pszFilePath);
-public:
-    unsigned char *m_pData;
-    bool m_bHasAlpha;
-    bool m_bPreMulti;
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT) || (CC_TARGET_PLATFORM == CC_PLATFORM_WP8)
-    CCFreeTypeFont* m_ft;
-#endif
-
-private:
-    // noncopyable
-    // CCImage(const CCImage&    rImg);
-    // CCImage & operator=(const CCImage&);
-
-
+    Format detectFormat(const unsigned char * data, ssize_t dataLen);
+    bool isPng(const unsigned char * data, ssize_t dataLen);
+    bool isJpg(const unsigned char * data, ssize_t dataLen);
+    bool isTiff(const unsigned char * data, ssize_t dataLen);
+    bool isWebp(const unsigned char * data, ssize_t dataLen);
+    bool isPvr(const unsigned char * data, ssize_t dataLen);
+    bool isEtc(const unsigned char * data, ssize_t dataLen);
+    bool isS3TC(const unsigned char * data,ssize_t dataLen);
+    bool isATITC(const unsigned char *data, ssize_t dataLen);
 };
 
 // end of platform group
@@ -211,4 +237,5 @@ private:
 
 NS_CC_END
 
+/// @endcond
 #endif    // __CC_IMAGE_H__

@@ -37,7 +37,7 @@
 #include "CCControlUtils.h"
 #include "CCControlHuePicker.h"
 #include "CCControlSaturationBrightnessPicker.h"
-#include "ColorPickerDelegate.h"
+#include "extensions/ExtensionExport.h"
 
 NS_CC_EXT_BEGIN
 
@@ -48,48 +48,39 @@ NS_CC_EXT_BEGIN
  * @{
  */
 
-class CC_DLL CCControlColourPicker : public CCControl
+class CC_EX_DLL ControlColourPicker: public Control
 {
-    GEODE_FRIEND_MODIFY
-    
 public:
-    // @note RobTop Addition
-    ccColor3B const& getColorValue() const;
-    // @note RobTop Addition
-    virtual void setColorValue(ccColor3B const&);
+    static ControlColourPicker* create();
+    /**
+     * @js ctor
+     * @lua new
+     */
+    ControlColourPicker();
+    /**
+     * @js NA
+     * @lua NA
+     */
+    virtual ~ControlColourPicker();
 
-    GEODE_CUSTOM_CONSTRUCTOR_COCOS(CCControlColourPicker, CCControl)
-    CCControlColourPicker();
-    virtual ~CCControlColourPicker();
+    virtual bool init() override;
 
-public:
-    // @note RobTop Addition
-    ccColor3B m_rgb;
-    HSV m_hsv;
-    CC_SYNTHESIZE_RETAIN(CCControlSaturationBrightnessPicker*, m_colourPicker, colourPicker)
-    
-    CC_SYNTHESIZE_RETAIN(CCControlHuePicker*, m_huePicker, HuePicker)
-    CC_SYNTHESIZE_RETAIN(CCSprite*, m_background, Background)
+    virtual void setColor(const Color3B& colorValue) override;
+    virtual void setEnabled(bool bEnabled) override;
 
-    // @note RobTop Addition
-    CC_SYNTHESIZE_NV(CCSprite*, m_colorTarget, ColorTarget)
-    // @note RobTop Addition
-    CC_SYNTHESIZE_NV(ColorPickerDelegate*, m_delegate, Delegate)
-    
-    
-public:
-    // @note RobTop Addition: renamed create to colourPicker
-    static CCControlColourPicker* colourPicker();
+    //virtual ~ControlColourPicker();
+    void hueSliderValueChanged(Ref * sender, Control::EventType controlEvent);
+    void colourSliderValueChanged(Ref * sender, Control::EventType controlEvent);
 
-    virtual bool init();
-    void hueSliderValueChanged(CCObject * sender, CCControlEvent controlEvent);
-    void colourSliderValueChanged(CCObject * sender, CCControlEvent controlEvent);
-
-protected:    
+protected:
     void updateControlPicker();
     void updateHueAndControlPicker();
-    virtual bool ccTouchBegan(CCTouch* touch, CCEvent* pEvent);
-    
+    virtual bool onTouchBegan(Touch* touch, Event* pEvent) override;
+
+    HSV _hsv;
+    CC_SYNTHESIZE_RETAIN(ControlSaturationBrightnessPicker*, _colourPicker, colourPicker)
+    CC_SYNTHESIZE_RETAIN(ControlHuePicker*, _huePicker, HuePicker)
+    CC_SYNTHESIZE_RETAIN(Sprite*, _background, Background)
 };
 
 // end of GUI group

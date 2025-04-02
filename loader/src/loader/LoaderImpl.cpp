@@ -52,7 +52,7 @@ bool Loader::Impl::isForwardCompatMode() {
 
     if (!m_forwardCompatMode.has_value()) {
         m_forwardCompatMode = !this->getGameVersion().empty() &&
-            this->getGameVersion() != GEODE_STR(GEODE_GD_VERSION);
+            this->getGameVersion() != GEODE_STR(GEODE_GAME_VERSION);
     }
     return m_forwardCompatMode.value();
 }

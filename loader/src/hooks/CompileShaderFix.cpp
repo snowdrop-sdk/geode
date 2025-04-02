@@ -6,7 +6,7 @@ using namespace geode::prelude;
 $execute {
     if (LoaderImpl::get()->isForwardCompatMode()) return;
 
-#if GEODE_COMP_GD_VERSION == 22074
+#if GEODE_COMP_GAME_VERSION == 22074
     // patch an abort() call to "return false;" in CCGLProgram::compileShader
     // for some reason cocos only properly returns false on winRT, everywhere
     // else it just closes the whole game

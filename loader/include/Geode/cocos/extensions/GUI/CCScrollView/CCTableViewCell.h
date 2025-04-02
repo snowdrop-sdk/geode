@@ -26,35 +26,42 @@
 #ifndef __CCTABLEVIEWCELL_H__
 #define __CCTABLEVIEWCELL_H__
 
-#include "../../../base_nodes/CCNode.h"
-#include "CCSorting.h"
+#include "extensions/ExtensionMacros.h"
+#include "2d/CCNode.h"
+#include "extensions/ExtensionExport.h"
 
+/**
+ * @addtogroup ui
+ * @{
+ */
 NS_CC_EXT_BEGIN
+
 
 /**
  * Abstract class for SWTableView cell node
- * @lua NA
  */
-class CC_DLL CCTableViewCell: public CCNode, public CCSortableObject
+class CC_EX_DLL TableViewCell: public Node
 {
 public:
-    CCTableViewCell() {}
+    CREATE_FUNC(TableViewCell);
+    
+    TableViewCell() {}
     /**
      * The index used internally by SWTableView and its subclasses
      */
-    unsigned int getIdx();
-    void setIdx(unsigned int uIdx);
+    ssize_t getIdx() const;
+    void setIdx(ssize_t uIdx);
     /**
      * Cleans up any resources linked to this cell and resets <code>idx</code> property.
      */
     void reset();
 
-    void setObjectID(unsigned int uIdx);
-    unsigned int getObjectID();
-public:
-    unsigned int m_uIdx;
+private:
+    ssize_t _idx;
 };
 
 NS_CC_EXT_END
+// end of ui group
+/// @}
 
 #endif /* __CCTABLEVIEWCELL_H__ */

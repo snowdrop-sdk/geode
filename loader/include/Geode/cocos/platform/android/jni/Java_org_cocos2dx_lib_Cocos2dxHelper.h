@@ -1,5 +1,6 @@
 /****************************************************************************
-Copyright (c) 2010 cocos2d-x.org
+Copyright (c) 2010-2012 cocos2d-x.org
+Copyright (c) 2013-2014 Chukong Technologies Inc.
 
 http://www.cocos2d-x.org
 
@@ -26,28 +27,11 @@ THE SOFTWARE.
 
 #include <string>
 
-typedef void (*EditTextCallback)(const char* pText, void* ctx);
+typedef void (*EditTextCallback)(const char* text, void* ctx);
 
 extern const char * getApkPath();
-extern void showDialogJNI(const char * pszMsg, const char * pszTitle);
-extern void showEditTextDialogJNI(const char* pszTitle, const char* pszContent, int nInputMode, int nInputFlag, int nReturnType, int nMaxLength, EditTextCallback pfEditTextCallback, void* ctx);
-extern void terminateProcessJNI();
-extern gd::string getCurrentLanguageJNI();
-extern gd::string getPackageNameJNI();
-extern gd::string getFileDirectoryJNI();
-extern void enableAccelerometerJNI();
-extern void disableAccelerometerJNI();
-extern void setAccelerometerIntervalJNI(float interval);
-// functions for CCUserDefault
-extern bool getBoolForKeyJNI(const char* pKey, bool defaultValue);
-extern int getIntegerForKeyJNI(const char* pKey, int defaultValue);
-extern float getFloatForKeyJNI(const char* pKey, float defaultValue);
-extern double getDoubleForKeyJNI(const char* pKey, double defaultValue);
-extern gd::string getStringForKeyJNI(const char* pKey, const char* defaultValue);
-extern void setBoolForKeyJNI(const char* pKey, bool value);
-extern void setIntegerForKeyJNI(const char* pKey, int value);
-extern void setFloatForKeyJNI(const char* pKey, float value);
-extern void setDoubleForKeyJNI(const char* pKey, double value);
-extern void setStringForKeyJNI(const char* pKey, const char* value);
+extern std::string getPackageNameJNI();
+extern int getObbAssetFileDescriptorJNI(const char* path, long* startOffset, long* size);
+extern void conversionEncodingJNI(const char* src, int byteSize, const char* fromCharset, char* dst, const char* newCharset);
 
 #endif /* __Java_org_cocos2dx_lib_Cocos2dxHelper_H__ */

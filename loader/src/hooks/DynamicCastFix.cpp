@@ -8,10 +8,10 @@ $execute {
     // this is needed because the transitions in cocos uses dynamic cast to check
     // layers, which fail on user layers due to typeinfo not matching
 
-    #if defined(GEODE_IS_MACOS) && GEODE_COMP_GD_VERSION != 22074
+    #if defined(GEODE_IS_MACOS) && GEODE_COMP_GAME_VERSION != 22074
         #error "Unsupported version for macOS dynamic cast fix, please update the addresses"
     #endif
-    #if defined(GEODE_IS_IOS) && GEODE_COMP_GD_VERSION != 22074
+    #if defined(GEODE_IS_IOS) && GEODE_COMP_GAME_VERSION != 22074
         #error "Unsupported version for iOS dynamic cast fix, please update the addresses"
     #endif
 
