@@ -625,6 +625,10 @@ SettingNodeV3* SettingV3::createNode(float width) {
     return nullptr;
 }
 
+SettingNodeV3* SettingV3::createNode(float width, SettingNodeV3Visitor* visitor) {
+    return this->createNode(width);
+}
+
 class TitleSettingV3::Impl final {
 public:
 };
@@ -646,11 +650,9 @@ bool TitleSettingV3::load(matjson::Value const& json) {
 bool TitleSettingV3::save(matjson::Value&) const {
     return true;
 }
-// SettingNodeV3* TitleSettingV3::createNode(float width) {
-//     return TitleSettingNodeV3::create(
-//         std::static_pointer_cast<TitleSettingV3>(shared_from_this()), width
-//     );
-// }
+SettingNodeV3* TitleSettingV3::createNode(float width, SettingNodeV3Visitor* visitor) {
+    return visitor->visit(this, width);
+}
 bool TitleSettingV3::isDefaultValue() const {
     return true;
 }
@@ -674,11 +676,9 @@ Result<> BoolSettingV3::isValid(bool value) const {
     return Ok();
 }
 
-// SettingNodeV3* BoolSettingV3::createNode(float width) {
-//     return BoolSettingNodeV3::create(
-//         std::static_pointer_cast<BoolSettingV3>(shared_from_this()), width
-//     );
-// }
+SettingNodeV3* BoolSettingV3::createNode(float width, SettingNodeV3Visitor* visitor) {
+    return visitor->visit(this, width);
+}
 
 class IntSettingV3::Impl final {
 public:
@@ -783,11 +783,9 @@ bool IntSettingV3::isInputEnabled() const {
     return m_impl->controls.textInputEnabled;
 }
 
-// SettingNodeV3* IntSettingV3::createNode(float width) {
-//     return IntSettingNodeV3::create(
-//         std::static_pointer_cast<IntSettingV3>(shared_from_this()), width
-//     );
-// }
+SettingNodeV3* IntSettingV3::createNode(float width, SettingNodeV3Visitor* visitor) {
+    return visitor->visit(this, width);
+}
 
 class FloatSettingV3::Impl final {
 public:
@@ -890,11 +888,9 @@ bool FloatSettingV3::isInputEnabled() const {
     return m_impl->controls.textInputEnabled;
 }
 
-// SettingNodeV3* FloatSettingV3::createNode(float width) {
-//     return FloatSettingNodeV3::create(
-//         std::static_pointer_cast<FloatSettingV3>(shared_from_this()), width
-//     );
-// }
+SettingNodeV3* FloatSettingV3::createNode(float width, SettingNodeV3Visitor* visitor) {
+    return visitor->visit(this, width);
+}
 
 
 class StringSettingV3::Impl final {
@@ -947,11 +943,9 @@ std::optional<std::vector<std::string>> StringSettingV3::getEnumOptions() const 
     return m_impl->oneOf;
 }
 
-// SettingNodeV3* StringSettingV3::createNode(float width) {
-//     return StringSettingNodeV3::create(
-//         std::static_pointer_cast<StringSettingV3>(shared_from_this()), width
-//     );
-// }
+SettingNodeV3* StringSettingV3::createNode(float width, SettingNodeV3Visitor* visitor) {
+    return visitor->visit(this, width);
+}
 
 class FileSettingV3::Impl final {
 public:
@@ -1060,11 +1054,9 @@ std::optional<std::vector<utils::file::FilePickOptions::Filter>> FileSettingV3::
     return m_impl->filters;
 }
 
-// SettingNodeV3* FileSettingV3::createNode(float width) {
-//     return FileSettingNodeV3::create(
-//         std::static_pointer_cast<FileSettingV3>(shared_from_this()), width
-//     );
-// }
+SettingNodeV3* FileSettingV3::createNode(float width, SettingNodeV3Visitor* visitor) {
+    return visitor->visit(this, width);
+}
 
 class Color3BSettingV3::Impl final {
 public:
@@ -1084,11 +1076,9 @@ Result<> Color3BSettingV3::isValid(Color3B value) const {
     return Ok();
 }
 
-// SettingNodeV3* Color3BSettingV3::createNode(float width) {
-//     return Color3BSettingNodeV3::create(
-//         std::static_pointer_cast<Color3BSettingV3>(shared_from_this()), width
-//     );
-// }
+SettingNodeV3* Color3BSettingV3::createNode(float width, SettingNodeV3Visitor* visitor) {
+    return visitor->visit(this, width);
+}
 
 class Color4BSettingV3::Impl final {
 public:
@@ -1108,8 +1098,6 @@ Result<> Color4BSettingV3::isValid(Color4B value) const {
     return Ok();
 }
 
-// SettingNodeV3* Color4BSettingV3::createNode(float width) {
-//     return Color4BSettingNodeV3::create(
-//         std::static_pointer_cast<Color4BSettingV3>(shared_from_this()), width
-//     );
-// }
+SettingNodeV3* Color4BSettingV3::createNode(float width, SettingNodeV3Visitor* visitor) {
+    return visitor->visit(this, width);
+}

@@ -74,11 +74,11 @@ bool ModSettingsPopup::setup(Mod* mod) {
     m_list->setTouchEnabled(true);
 
     for (auto& key : mod->getSettingKeys()) {
-        SettingNode* node;
+        SettingNode* node = nullptr;
         if (auto sett = mod->getSetting(key)) {
             node = sett->createNode(layerSize.width);
         }
-        else {
+        if (!node) {
             node = UnresolvedCustomSettingNode::create(key, mod, layerSize.width);
         }
 

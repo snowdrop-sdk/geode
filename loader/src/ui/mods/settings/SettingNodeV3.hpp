@@ -12,6 +12,18 @@ using namespace geode::prelude;
 // !! If these classes are ever exposed in a public header, make sure to pimpl EVERYTHING! !!
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+class GeodeSettingNodeV3Visitor : public SettingNodeV3Visitor {
+public:
+    SettingNodeV3* visit(TitleSettingV3* sett, float width) override;
+    SettingNodeV3* visit(BoolSettingV3* sett, float width) override;
+    SettingNodeV3* visit(IntSettingV3* sett, float width) override;
+    SettingNodeV3* visit(FloatSettingV3* sett, float width) override;
+    SettingNodeV3* visit(StringSettingV3* sett, float width) override;
+    SettingNodeV3* visit(FileSettingV3* sett, float width) override;
+    SettingNodeV3* visit(Color3BSettingV3* sett, float width) override;
+    SettingNodeV3* visit(Color4BSettingV3* sett, float width) override;
+};
+
 class TitleSettingNodeV3 : public SettingNodeV3 {
 protected:
     CCMenuItemToggler* m_collapseToggle;

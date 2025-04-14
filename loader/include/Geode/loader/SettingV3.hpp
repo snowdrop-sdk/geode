@@ -15,6 +15,27 @@ class ModSettingsPopup;
 namespace geode {
     class ModSettingsManager;
     class SettingNodeV3;
+    class TitleSettingV3;
+    class BoolSettingV3;
+    class IntSettingV3;
+    class FloatSettingV3;
+    class StringSettingV3;
+    class FileSettingV3;
+    class Color3BSettingV3;
+    class Color4BSettingV3;
+
+    class SettingNodeV3Visitor {
+    public:
+        virtual ~SettingNodeV3Visitor() = default;
+        virtual SettingNodeV3* visit(TitleSettingV3* sett, float width) = 0;
+        virtual SettingNodeV3* visit(BoolSettingV3* sett, float width) = 0;
+        virtual SettingNodeV3* visit(IntSettingV3* sett, float width) = 0;
+        virtual SettingNodeV3* visit(FloatSettingV3* sett, float width) = 0;
+        virtual SettingNodeV3* visit(StringSettingV3* sett, float width) = 0;
+        virtual SettingNodeV3* visit(FileSettingV3* sett, float width) = 0;
+        virtual SettingNodeV3* visit(Color3BSettingV3* sett, float width) = 0;
+        virtual SettingNodeV3* visit(Color4BSettingV3* sett, float width) = 0;
+    };
 
     class GEODE_DLL SettingV3 : public std::enable_shared_from_this<SettingV3> {
     private:
@@ -171,6 +192,7 @@ namespace geode {
         virtual bool load(matjson::Value const& json) = 0;
         virtual bool save(matjson::Value& json) const = 0;
         virtual SettingNodeV3* createNode(float width);
+        virtual SettingNodeV3* createNode(float width, SettingNodeV3Visitor* visitor);
 
         virtual bool isDefaultValue() const = 0;
         /**
@@ -335,7 +357,7 @@ namespace geode {
 
         bool load(matjson::Value const& json) override;
         bool save(matjson::Value& json) const override;
-        SettingNodeV3* createNode(float width) override;
+        SettingNodeV3* createNode(float width, SettingNodeV3Visitor* visitor) override;
 
         bool isDefaultValue() const override;
         void reset() override;
@@ -356,7 +378,7 @@ namespace geode {
 
         Result<> isValid(bool value) const override;
         
-        SettingNodeV3* createNode(float width) override;
+        SettingNodeV3* createNode(float width, SettingNodeV3Visitor* visitor) override;
     };
 
     class GEODE_DLL IntSettingV3 final : public SettingBaseValueV3<int64_t> {
@@ -385,7 +407,7 @@ namespace geode {
         int64_t getSliderSnap() const;
         bool isInputEnabled() const;
     
-        SettingNodeV3* createNode(float width) override;
+        SettingNodeV3* createNode(float width, SettingNodeV3Visitor* visitor) override;
     };
 
     class GEODE_DLL FloatSettingV3 final : public SettingBaseValueV3<double> {
@@ -414,7 +436,7 @@ namespace geode {
         double getSliderSnap() const;
         bool isInputEnabled() const;
         
-        SettingNodeV3* createNode(float width) override;
+        SettingNodeV3* createNode(float width, SettingNodeV3Visitor* visitor) override;
     };
 
     class GEODE_DLL StringSettingV3 final : public SettingBaseValueV3<std::string, std::string_view> {
@@ -436,7 +458,7 @@ namespace geode {
         std::optional<std::string> getAllowedCharacters() const;
         std::optional<std::vector<std::string>> getEnumOptions() const;
         
-        SettingNodeV3* createNode(float width) override;
+        SettingNodeV3* createNode(float width, SettingNodeV3Visitor* visitor) override;
     };
 
     class GEODE_DLL FileSettingV3 final : public SettingBaseValueV3<std::filesystem::path, std::filesystem::path const&> {
@@ -459,7 +481,7 @@ namespace geode {
 
         std::optional<std::vector<utils::file::FilePickOptions::Filter>> getFilters() const;
         
-        SettingNodeV3* createNode(float width) override;
+        SettingNodeV3* createNode(float width, SettingNodeV3Visitor* visitor) override;
     };
 
     class GEODE_DLL Color3BSettingV3 final : public SettingBaseValueV3<Color3B> {
@@ -477,7 +499,7 @@ namespace geode {
 
         Result<> isValid(Color3B value) const override;
 
-        SettingNodeV3* createNode(float width) override;
+        SettingNodeV3* createNode(float width, SettingNodeV3Visitor* visitor) override;
     };
 
     class GEODE_DLL Color4BSettingV3 final : public SettingBaseValueV3<Color4B> {
@@ -495,7 +517,7 @@ namespace geode {
 
         Result<> isValid(Color4B value) const override;
 
-        SettingNodeV3* createNode(float width) override;
+        SettingNodeV3* createNode(float width, SettingNodeV3Visitor* visitor) override;
     };
 
     class GEODE_DLL SettingChangedEventV3 final : public Event {

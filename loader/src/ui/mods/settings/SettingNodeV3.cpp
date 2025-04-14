@@ -4,6 +4,38 @@
 #include <Geode/loader/Dirs.hpp>
 #include <ui/mods/GeodeStyle.hpp>
 
+SettingNodeV3* GeodeSettingNodeV3Visitor::visit(TitleSettingV3* sett, float width) {
+    return TitleSettingNodeV3::create(sett->shared_from_this(), width);
+}
+
+SettingNodeV3* GeodeSettingNodeV3Visitor::visit(BoolSettingV3* sett, float width) {
+    return BoolSettingNodeV3::create(sett->shared_from_this(), width);
+}
+
+SettingNodeV3* GeodeSettingNodeV3Visitor::visit(IntSettingV3* sett, float width) {
+    return IntSettingNodeV3::create(sett->shared_from_this(), width);
+}
+
+SettingNodeV3* GeodeSettingNodeV3Visitor::visit(FloatSettingV3* sett, float width) {
+    return FloatSettingNodeV3::create(sett->shared_from_this(), width);
+}
+
+SettingNodeV3* GeodeSettingNodeV3Visitor::visit(StringSettingV3* sett, float width) {
+    return StringSettingNodeV3::create(sett->shared_from_this(), width);
+}
+
+SettingNodeV3* GeodeSettingNodeV3Visitor::visit(FileSettingV3* sett, float width) {
+    return FileSettingNodeV3::create(sett->shared_from_this(), width);
+}
+
+SettingNodeV3* GeodeSettingNodeV3Visitor::visit(Color3BSettingV3* sett, float width) {
+    return Color3BSettingNodeV3::create(sett->shared_from_this(), width);
+}
+
+SettingNodeV3* GeodeSettingNodeV3Visitor::visit(Color4BSettingV3* sett, float width) {
+    return Color4BSettingNodeV3::create(sett->shared_from_this(), width);
+}
+
 class SettingNodeSizeChangeEventV3::Impl final {
 public:
     SettingNodeV3* node;
