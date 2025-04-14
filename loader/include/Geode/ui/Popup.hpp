@@ -210,7 +210,7 @@ namespace geode {
             return CloseEventFilter(this);
         }
     };
-
+#if 0
     GEODE_DLL FLAlertLayer* createQuickPopup(
         char const* title, std::string const& content, char const* btn1, char const* btn2,
         std::function<void(FLAlertLayer*, bool)> selected, bool doShow = true
@@ -230,4 +230,5 @@ namespace geode {
         char const* title, std::string const& content, char const* btn1, char const* btn2,
         float width, std::function<void(FLAlertLayer*, bool)> selected, bool doShow, bool cancelledByEscape
     );
+#endif
 }

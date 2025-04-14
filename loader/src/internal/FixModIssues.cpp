@@ -1,6 +1,6 @@
 #include "FixModIssues.hpp"
 #include <Geode/loader/Loader.hpp>
-#include <Geode/ui/Popup.hpp>
+#include <Geode/utils/bridge.hpp>
 #include <server/DownloadManager.hpp>
 #include <ui/mods/sources/ModSource.hpp>
 #include <vector>
@@ -56,11 +56,11 @@ protected:
 
     void nextQuestion() {
         auto& question = m_questionQueue.front();
-        createQuickPopup(
-            question.title.c_str(),
+        bridge::createGamePopup(
+            question.title,
             question.content,
-            question.optionA.c_str(), question.optionB.c_str(),
-            [this, &question](auto*, bool btn2) {
+            question.optionA, question.optionB,
+            [this, &question](bool btn2) {
                 question.after(btn2);
                 m_questionQueue.pop_front();
                 if (!m_questionQueue.empty()) {

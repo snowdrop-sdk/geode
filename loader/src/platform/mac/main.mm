@@ -127,14 +127,14 @@ void applicationDidFinishLaunchingHook(void* self, SEL sel, NSNotification* noti
 
 
 bool loadGeode() {
-    if (GEODE_STR(GEODE_GD_VERSION) != LoaderImpl::get()->getGameVersion()) {
+    if (GEODE_STR(GEODE_GAME_VERSION) != LoaderImpl::get()->getGameVersion()) {
         console::messageBox(
             "Unable to Load Geode!",
             fmt::format(
                 "This version of Geode is made for Geometry Dash {} "
                 "but you're trying to play with GD {}.\n"
                 "Please, update your game.",
-                GEODE_STR(GEODE_GD_VERSION),
+                GEODE_STR(GEODE_GAME_VERSION),
                 LoaderImpl::get()->getGameVersion()
             )
         );

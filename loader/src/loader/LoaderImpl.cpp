@@ -1,5 +1,4 @@
 #include "LoaderImpl.hpp"
-#include <cocos2d.h>
 
 #include "ModImpl.hpp"
 #include "ModMetadataImpl.hpp"
@@ -30,7 +29,6 @@
 #include <vector>
 
 #include <server/DownloadManager.hpp>
-#include <Geode/ui/Popup.hpp>
 
 using namespace geode::prelude;
 
@@ -52,7 +50,7 @@ bool Loader::Impl::isForwardCompatMode() {
 
     if (!m_forwardCompatMode.has_value()) {
         m_forwardCompatMode = !this->getGameVersion().empty() &&
-            this->getGameVersion() != GEODE_STR(GEODE_GD_VERSION);
+            this->getGameVersion() != GEODE_STR(GEODE_GAME_VERSION);
     }
     return m_forwardCompatMode.value();
 }
@@ -132,8 +130,10 @@ Result<> Loader::Impl::setup() {
 }
 
 void Loader::Impl::addSearchPaths() {
+#if 0
     CCFileUtils::get()->addPriorityPath(dirs::getGeodeResourcesDir().string().c_str());
     CCFileUtils::get()->addPriorityPath(dirs::getModRuntimeDir().string().c_str());
+#endif
 }
 
 void Loader::Impl::updateResources(bool forceReload) {
@@ -148,7 +148,9 @@ void Loader::Impl::updateResources(bool forceReload) {
     // deduplicate mod resource paths, since they added in both updateModResources and Mod::Impl::setup
     // we have to call it in both places since setup is only called once ever, but updateResources is called
     // on every texture reload
+#if 0
     CCFileUtils::get()->updatePaths();
+#endif
 }
 
 std::vector<Mod*> Loader::Impl::getAllMods() {
@@ -236,7 +238,9 @@ void Loader::Impl::updateModResources(Mod* mod) {
     if (!mod->isInternal()) {
         // geode.loader resource is stored somewhere else, which is already added anyway
         auto searchPathRoot = dirs::getModRuntimeDir() / mod->getID() / "resources";
+        #if 0
         CCFileUtils::get()->addSearchPath(searchPathRoot.string().c_str());
+        #endif
     }
 
     // only thing needs previous setup is spritesheets
@@ -250,6 +254,7 @@ void Loader::Impl::updateModResources(Mod* mod) {
         log::debug("Adding sheet {}", sheet);
         auto png = sheet + ".png";
         auto plist = sheet + ".plist";
+        #if 0
         auto ccfu = CCFileUtils::get();
 
         if (png == std::string(ccfu->fullPathForFilename(png.c_str(), false)) ||
@@ -263,6 +268,7 @@ void Loader::Impl::updateModResources(Mod* mod) {
             CCTextureCache::get()->addImage(png.c_str(), false);
             CCSpriteFrameCache::get()->addSpriteFramesWithFile(plist.c_str());
         }
+        #endif
     }
 }
 
@@ -993,6 +999,7 @@ void Loader::Impl::forceSafeMode() {
 void Loader::Impl::installModManuallyFromFile(std::filesystem::path const& path, std::function<void()> after) {
     auto res = ModMetadata::createFromGeodeFile(path);
     if (!res) {
+        #if 0
         FLAlertLayer::create(
             "Invalid File",
             fmt::format(
@@ -1002,12 +1009,14 @@ void Loader::Impl::installModManuallyFromFile(std::filesystem::path const& path,
             ),
             "OK"
         )->show();
+        #endif
         return;
     }
     auto meta = res.unwrap();
 
     auto check = meta.checkTargetVersions();
     if (!check) {
+        #if 0
         FLAlertLayer::create(
             "Invalid Mod Version",
             fmt::format(
@@ -1017,6 +1026,7 @@ void Loader::Impl::installModManuallyFromFile(std::filesystem::path const& path,
             ),
             "OK"
         )->show();
+        #endif
     }
 
     auto doInstallModFromFile = [this, path, meta, after]() {
@@ -1034,6 +1044,7 @@ void Loader::Impl::installModManuallyFromFile(std::filesystem::path const& path,
 
         // This is incredibly unlikely but theoretically possible
         if (counter >= MAX_ATTEMPTS) {
+            #if 0
             FLAlertLayer::create(
                 "Unable to Install",
                 fmt::format(
@@ -1042,12 +1053,14 @@ void Loader::Impl::installModManuallyFromFile(std::filesystem::path const& path,
                 ),
                 "OK"
             )->show();
+            #endif
             return;
         }
 
         // Actually copy the file over to the install directory
         std::filesystem::copy_file(path, installTo, ec);
         if (ec) {
+            #if 0
             FLAlertLayer::create(
                 "Unable to Install",
                 fmt::format(
@@ -1056,6 +1069,7 @@ void Loader::Impl::installModManuallyFromFile(std::filesystem::path const& path,
                 ),
                 "OK"
             )->show();
+            #endif
             return;
         }
 
@@ -1079,7 +1093,7 @@ void Loader::Impl::installModManuallyFromFile(std::filesystem::path const& path,
         if (after) after();
 
         // No need for the user to go and manually clean up the file
-        createQuickPopup(
+        bridge::createGamePopup(
             "Mod Installed",
             fmt::format(
                 "Mod <co>{}</c> has been successfully installed from file! "
@@ -1087,11 +1101,12 @@ void Loader::Impl::installModManuallyFromFile(std::filesystem::path const& path,
                 meta.getName()
             ),
             "OK", "Delete File",
-            [path](auto, bool btn2) {
+            [path](bool btn2) {
                 if (btn2) {
                     std::error_code ec;
                     std::filesystem::remove(path, ec);
                     if (ec) {
+                        #if 0
                         FLAlertLayer::create(
                             "Unable to Delete",
                             fmt::format(
@@ -1100,6 +1115,7 @@ void Loader::Impl::installModManuallyFromFile(std::filesystem::path const& path,
                             ),
                             "OK"
                         )->show();
+                        #endif
                     }
                     // No need to show a confirmation popup if successful since that's 
                     // to be assumed via pressing the button on the previous popup
@@ -1109,7 +1125,7 @@ void Loader::Impl::installModManuallyFromFile(std::filesystem::path const& path,
     };
 
     if (auto existing = Loader::get()->getInstalledMod(meta.getID())) {
-        createQuickPopup(
+        bridge::createGamePopup(
             "Already Installed",
             fmt::format(
                 "The mod <cy>{}</c> <cj>{}</c> has already been installed "
@@ -1119,10 +1135,11 @@ void Loader::Impl::installModManuallyFromFile(std::filesystem::path const& path,
                 existing->getVersion()
             ),
             "Cancel", "Replace",
-            [doInstallModFromFile, path, existing, meta](auto, bool btn2) mutable {
+            [doInstallModFromFile, path, existing, meta](bool btn2) mutable {
                 std::error_code ec;
                 std::filesystem::remove(existing->getPackagePath(), ec);
                 if (ec) {
+                    #if 0
                     FLAlertLayer::create(
                         "Unable to Uninstall",
                         fmt::format(
@@ -1131,6 +1148,7 @@ void Loader::Impl::installModManuallyFromFile(std::filesystem::path const& path,
                         ),
                         "OK"
                     )->show();
+                    #endif
                     return;
                 }
                 doInstallModFromFile();

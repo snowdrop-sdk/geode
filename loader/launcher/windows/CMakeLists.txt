@@ -18,8 +18,8 @@ set_target_properties(ProxyLoader PROPERTIES
 	ARCHIVE_OUTPUT_DIRECTORY "${GEODE_BIN_PATH}/nightly"
 )
 
-string(REPLACE "." "_" GEODE_GD_VERSION_IDENTIFIER "_${GEODE_GD_VERSION}")
-target_compile_definitions(ProxyLoader PRIVATE GEODE_GD_VERSION_IDENTIFIER=${GEODE_GD_VERSION_IDENTIFIER})
+string(REPLACE "." "_" GEODE_GAME_VERSION_IDENTIFIER "_${GEODE_GAME_VERSION}")
+target_compile_definitions(ProxyLoader PRIVATE GEODE_GAME_VERSION_IDENTIFIER=${GEODE_GAME_VERSION_IDENTIFIER})
 
 add_executable(Updater Updater.cpp)
 target_compile_features(Updater PUBLIC cxx_std_17)

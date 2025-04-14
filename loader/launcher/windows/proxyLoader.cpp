@@ -4,6 +4,12 @@
 #include <vector>
 #include <filesystem>
 
+#if defined(WIN64) || defined(_WIN64) || defined(__WIN64) && !defined(__CYGWIN__)
+#define GEODE_CALL 
+#else
+#define GEODE_CALL __stdcall
+#endif
+
 struct XINPUT_STATE;
 struct XINPUT_CAPABILITIES;
 struct XINPUT_VIBRATION;
@@ -31,50 +37,50 @@ static FARPROC getFP(const std::string& sym) {
     return NULL;
 }
 
-#pragma comment(linker, "/export:XInputGetState,@2")
-extern "C" DWORD XInputGetState(DWORD dwUserIndex, XINPUT_STATE *pState) {
-    static auto fp = getFP("XInputGetState");
-    if (fp) {
-        using FPType = decltype(&XInputGetState);
-        return reinterpret_cast<FPType>(fp)(dwUserIndex, pState);
-    }
+// #pragma comment(linker, "/export:XInputGetState,@2")
+// extern "C" DWORD XInputGetState(DWORD dwUserIndex, XINPUT_STATE *pState) {
+//     static auto fp = getFP("XInputGetState");
+//     if (fp) {
+//         using FPType = decltype(&XInputGetState);
+//         return reinterpret_cast<FPType>(fp)(dwUserIndex, pState);
+//     }
 
-    return ERROR_DEVICE_NOT_CONNECTED;
-}
+//     return ERROR_DEVICE_NOT_CONNECTED;
+// }
 
-#pragma comment(linker, "/export:XInputSetState,@3")
-extern "C" DWORD XInputSetState(DWORD dwUserIndex, XINPUT_VIBRATION* pVibration) {
-    static auto fp = getFP("XInputSetState");
-    if (fp) {
-        using FPType = decltype(&XInputSetState);
-        return reinterpret_cast<FPType>(fp)(dwUserIndex, pVibration);
-    }
+// #pragma comment(linker, "/export:XInputSetState,@3")
+// extern "C" DWORD XInputSetState(DWORD dwUserIndex, XINPUT_VIBRATION* pVibration) {
+//     static auto fp = getFP("XInputSetState");
+//     if (fp) {
+//         using FPType = decltype(&XInputSetState);
+//         return reinterpret_cast<FPType>(fp)(dwUserIndex, pVibration);
+//     }
 
-    return ERROR_DEVICE_NOT_CONNECTED;
-}
+//     return ERROR_DEVICE_NOT_CONNECTED;
+// }
 
-#pragma comment(linker, "/export:XInputGetCapabilities,@4")
-extern "C" DWORD XInputGetCapabilities(DWORD dwUserIndex, DWORD dwFlags, XINPUT_CAPABILITIES *pCapabilities) {
-    static auto fp = getFP("XInputGetCapabilities");
-    if (fp) {
-        using FPType = decltype(&XInputGetCapabilities);
-        return reinterpret_cast<FPType>(fp)(dwUserIndex, dwFlags, pCapabilities);
-    }
+// #pragma comment(linker, "/export:XInputGetCapabilities,@4")
+// extern "C" DWORD XInputGetCapabilities(DWORD dwUserIndex, DWORD dwFlags, XINPUT_CAPABILITIES *pCapabilities) {
+//     static auto fp = getFP("XInputGetCapabilities");
+//     if (fp) {
+//         using FPType = decltype(&XInputGetCapabilities);
+//         return reinterpret_cast<FPType>(fp)(dwUserIndex, dwFlags, pCapabilities);
+//     }
 
-    return ERROR_DEVICE_NOT_CONNECTED;
-}
+//     return ERROR_DEVICE_NOT_CONNECTED;
+// }
 
 static std::wstring getErrorString(DWORD error) {
     return L"Could not load Geode! Error code: " + std::to_wstring(error);
 }
 
-static DWORD errorThread(LPVOID param) {
+static GEODE_CALL DWORD errorThread(LPVOID param) {
     constexpr wchar_t REDIST_ERROR[] = L"Could not load Geode!\n"
         "This is likely due to an outdated redist package.\n"
         "Do you want to update Microsoft Visual C++ Redistributable 2022 to try to fix this issue?";
     constexpr wchar_t ALT_REDIST_ERROR[] = L"Could not load Geode!\n\n"
         "Please **delete** the following files from your Geometry Dash directory and try again: ";
-    const DWORD error = reinterpret_cast<DWORD64>(param);
+    const DWORD error = reinterpret_cast<size_t>(param);
 
     if (error == ERROR_DLL_INIT_FAILED) {
 
@@ -120,7 +126,7 @@ BOOL WINAPI DllMain(HINSTANCE module, DWORD reason, LPVOID _) {
 
         // This is UB.
         if (LoadLibraryW(L"Geode.dll") == NULL) {
-            const auto param = reinterpret_cast<LPVOID>(static_cast<DWORD64>(GetLastError()));
+            const auto param = reinterpret_cast<LPVOID>(static_cast<size_t>(GetLastError()));
             CreateThread(NULL, 0, &errorThread, param, 0, NULL);
         }
     }

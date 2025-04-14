@@ -12,7 +12,7 @@
 
 using namespace server;
 
-#define GEODE_GD_VERSION_STR GEODE_STR(GEODE_GD_VERSION)
+#define GEODE_GAME_VERSION_STR GEODE_STR(GEODE_GAME_VERSION)
 
 template <class K, class V>
     requires std::equality_comparable<K> && std::copy_constructible<K>
@@ -576,7 +576,7 @@ ServerRequest<ServerModsList> server::getMods(ModsQuery const& query, bool useCa
         req.param("query", *query.query);
     }
 
-    req.param("gd", GEODE_GD_VERSION_STR);
+    req.param("gd", GEODE_GAME_VERSION_STR);
     req.param("geode", Loader::get()->getVersion().toNonVString());
 
     if (query.platforms.size()) {
@@ -785,7 +785,7 @@ ServerRequest<std::vector<ServerModUpdate>> server::batchedCheckUpdates(std::vec
     auto req = web::WebRequest();
     req.userAgent(getServerUserAgent());
     req.param("platform", GEODE_PLATFORM_SHORT_IDENTIFIER);
-    req.param("gd", GEODE_GD_VERSION_STR);
+    req.param("gd", GEODE_GAME_VERSION_STR);
     req.param("geode", Loader::get()->getVersion().toNonVString());
 
     req.param("ids", ranges::join(batch, ";"));

@@ -3,12 +3,7 @@
 #include "Traits.hpp"
 
 #include <Geode/loader/Loader.hpp>
-#include <cocos2d.h>
 #include <vector>
-
-namespace cocos2d {
-    class CCNode;
-}
 
 namespace geode {
     template <class, class>
@@ -44,10 +39,6 @@ namespace geode::modifier {
             m_destructorFunctions.at(index) = std::move(destructor);
             return m_containedFields.at(index);
         }
-
-        static FieldContainer* from(cocos2d::CCNode* node, char const* forClass) {
-            return node->getFieldContainer(forClass);
-        }
     };
 
     GEODE_DLL size_t getFieldIndexForClass(char const* name);
@@ -78,7 +69,7 @@ namespace geode::modifier {
             // static_assert(sizeof(Base) + sizeof() == sizeof(Intermediate), "offsetof not correct");
 
             // generating the container if it doesn't exist
-            auto container = FieldContainer::from(node, typeid(Base).name());
+            auto container = node->getFieldContainer(typeid(Base).name());
 
             // the index is global across all mods, so the
             // function is defined in the loader source

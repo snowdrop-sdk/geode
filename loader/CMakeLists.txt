@@ -62,28 +62,28 @@ configure_file(src/internal/about.cpp.in ${CMAKE_CURRENT_SOURCE_DIR}/src/interna
 
 # Source files
 file(GLOB SOURCES CONFIGURE_DEPENDS 
-	src/cocos2d-ext/*.cpp
-	src/cocos2d-ext/zip/*.cpp
+	# src/cocos2d-ext/*.cpp
+	# src/cocos2d-ext/zip/*.cpp
 	src/core/*.cpp
-	src/hooks/*.cpp
-	src/ids/*.cpp
+	# src/hooks/*.cpp
+	# src/ids/*.cpp
 	src/internal/*.cpp
 	src/server/*.cpp
 	src/loader/*.cpp
 	src/load.cpp
 	src/utils/*.cpp
-	src/ui/*.cpp
-	src/ui/nodes/*.cpp
-	src/ui/other/*.cpp
-	src/ui/mods/*.cpp
-	src/ui/mods/list/*.cpp
-	src/ui/mods/popups/*.cpp
-	src/ui/mods/events/*.cpp
-	src/ui/mods/sources/*.cpp
-	src/ui/mods/settings/*.cpp
-	src/ui/mods/test/*.cpp
-	src/ui/*.cpp
-	src/c++stl/*.cpp
+	# src/ui/*.cpp
+	# src/ui/nodes/*.cpp
+	# src/ui/other/*.cpp
+	# src/ui/mods/*.cpp
+	# src/ui/mods/list/*.cpp
+	# src/ui/mods/popups/*.cpp
+	# src/ui/mods/events/*.cpp
+	# src/ui/mods/sources/*.cpp
+	# src/ui/mods/settings/*.cpp
+	# src/ui/mods/test/*.cpp
+	# src/ui/*.cpp
+	# src/c++stl/*.cpp
 	hash/hash.cpp
 )
 
@@ -356,7 +356,7 @@ elseif (WIN32)
 	set(LAUNCHER_TARGET ProxyLoader Updater)
 endif()
 
-add_subdirectory(test)
+# add_subdirectory(test)
 
 # Add install target on CLI >= 2.10.0 (which adds `geode profile path`)
 if (NOT GEODE_BUILDING_DOCS)

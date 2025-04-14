@@ -157,14 +157,14 @@ int WINAPI gdMainHook(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmd
 
     fixCurrentWorkingDirectory();
 
-    if (versionToTimestamp(GEODE_STR(GEODE_GD_VERSION)) > gdTimestamp) {
+    if (versionToTimestamp(GEODE_STR(GEODE_GAME_VERSION)) > gdTimestamp) {
         console::messageBox(
             "Unable to Load Geode!",
             fmt::format(
                 "This version of Geode is made for Geometry Dash {} "
                 "but you're trying to play with GD {}.\n"
                 "Please, update your game.",
-                GEODE_STR(GEODE_GD_VERSION),
+                GEODE_STR(GEODE_GAME_VERSION),
                 LoaderImpl::get()->getGameVersion()
             )
         );
@@ -241,7 +241,7 @@ std::string loadGeode() {
     // 48 8d 0d xx xx xx xx   lea rcx, [rip + ...]
     // e8 ...                 call ...
 
-    constexpr uint64_t mainSearchBytes = GEODE_WINDOWS64(0xd233c08b4ccb8b44) GEODE_WINDOWS32(0x004000006a006800);
+    uint64_t mainSearchBytes = GEODE_WINDOWS64(0xd233c08b4ccb8b44) GEODE_WINDOWS32(0x004000006a006800);
     constexpr ptrdiff_t mainSearchCallOffset = GEODE_WINDOWS64(15) GEODE_WINDOWS32(7);
 
 #ifdef GEODE_IS_WINDOWS32

@@ -3,7 +3,6 @@
 using namespace geode::prelude;
 
 #include <Geode/loader/Dirs.hpp>
-#include <Geode/binding/AppDelegate.hpp>
 #include "nfdwin.hpp"
 #include <Windows.h>
 #include <processthreadsapi.h>
@@ -11,7 +10,6 @@ using namespace geode::prelude;
 #include <shlwapi.h>
 #include <shobjidl.h>
 #include <Geode/utils/web.hpp>
-#include <Geode/utils/cocos.hpp>
 #include <Geode/loader/Log.hpp>
 #include <filesystem>
 #include <Geode/utils/permission.hpp>
@@ -148,15 +146,6 @@ void utils::web::openLinkInBrowser(std::string const& url) {
     ShellExecuteA(0, 0, url.c_str(), 0, 0, SW_SHOW);
 }
 
-CCPoint cocos::getMousePos() {
-    auto* director = CCDirector::get();
-    auto* gl = director->getOpenGLView();
-    auto winSize = director->getWinSize();
-    auto frameSize = gl->getFrameSize();
-    auto mouse = gl->getMousePosition() / frameSize;
-    return ccp(mouse.x, 1.f - mouse.y) * winSize;
-}
-
 std::filesystem::path dirs::getGameDir() {
     // only fetch the path once, since ofc it'll never change
     // throughout the execution
@@ -211,10 +200,11 @@ void geode::utils::game::exit() {
     }
     #endif
 
+    #if 0
     // If this breaks down the read, uhhh blame Cvolton or something
     if (AppDelegate::get()) {
         AppDelegate::get()->trySaveGame(true);
-    }
+    #endif
     std::exit(0);
 }
 

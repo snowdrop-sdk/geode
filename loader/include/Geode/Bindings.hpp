@@ -10,8 +10,8 @@
 
 #include <Geode/DefaultInclude.hpp>
 #include <Geode/utils/addresser.hpp>
-#include <cocos-ext.h>
-#include <cocos2d.h>
+// #include <cocos-ext.h>
+// #include <cocos2d.h>
 #include <fmod.hpp>
 #include <stdint.h>
 #include <type_traits>
@@ -20,4 +20,4 @@
 #define CLASSPARAM(...)
 #define STRUCTPARAM(...)
 
-#include <Geode/GeneratedBinding.hpp>
+// #include <Geode/GeneratedBinding.hpp>

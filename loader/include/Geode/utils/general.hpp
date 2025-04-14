@@ -12,7 +12,20 @@
 #include <charconv>
 #include <clocale>
 #include <type_traits>
+#include "../loader/Types.hpp"
 #include <fmt/format.h>
+
+template <>
+struct matjson::Serialize<geode::Color3B> {
+    static geode::Result<geode::Color3B> GEODE_DLL fromJson(Value const& value);
+    static Value GEODE_DLL toJson(geode::Color3B const& value);
+};
+
+template <>
+struct matjson::Serialize<geode::Color4B> {
+    static geode::Result<geode::Color4B> GEODE_DLL fromJson(Value const& value);
+    static Value GEODE_DLL toJson(geode::Color4B const& value);
+};
 
 namespace geode {
     using ByteVector = std::vector<uint8_t>;
@@ -166,6 +179,72 @@ namespace geode {
     constexpr auto Err(fmt::format_string<Args...> fmt, Args&&... args) {
         return Err(fmt::format(fmt, std::forward<Args>(args)...));
     }
+
+    inline Color4B invert4B(Color4B const& color) {
+        return {
+            static_cast<uint8_t>(255 - color.r),
+            static_cast<uint8_t>(255 - color.g),
+            static_cast<uint8_t>(255 - color.b),
+            color.a};
+    }
+
+    inline Color3B invert3B(Color3B const& color) {
+        return {
+            static_cast<uint8_t>(255 - color.r),
+            static_cast<uint8_t>(255 - color.g),
+            static_cast<uint8_t>(255 - color.b)};
+    }
+
+    inline Color3B lighten3B(Color3B const& color, int amount) {
+        return {
+            static_cast<uint8_t>(utils::clamp(color.r + amount, 0, 255)),
+            static_cast<uint8_t>(utils::clamp(color.g + amount, 0, 255)),
+            static_cast<uint8_t>(utils::clamp(color.b + amount, 0, 255)),
+        };
+    }
+
+    inline Color3B darken3B(Color3B const& color, int amount) {
+        return lighten3B(color, -amount);
+    }
+
+    inline Color3B to3B(Color4B const& color) {
+        return {color.r, color.g, color.b};
+    }
+
+    inline Color4B to4B(Color3B const& color, uint8_t alpha = 255) {
+        return {color.r, color.g, color.b, alpha};
+    }
+
+    inline Color4F to4F(Color4B const& color) {
+        return {color.r / 255.f, color.g / 255.f, color.b / 255.f, color.a / 255.f};
+    }
+
+    /**
+     * Parse a ccColor3B from a hexadecimal string. The string may contain 
+     * a leading '#'
+     * @param hexValue The string to parse into a color
+     * @param permissive If true, strings like "f" are considered valid 
+     * representations of the color white. Useful for UIs that allow entering 
+     * a hex color. Empty strings evaluate to pure white
+     * @returns A ccColor3B if it could be successfully parsed, or an error 
+     * indicating the failure reason
+     */
+    GEODE_DLL Result<Color3B> cc3bFromHexString(std::string const& hexValue, bool permissive = false);
+    /**
+     * Parse a ccColor4B from a hexadecimal string. The string may contain 
+     * a leading '#'
+     * @param hexValue The string to parse into a color
+     * @param requireAlpha Require the alpha component to be passed. If false, 
+     * alpha defaults to 255
+     * @param permissive If true, strings like "f" are considered valid 
+     * representations of the color white. Useful for UIs that allow entering 
+     * a hex color. Empty strings evaluate to pure white
+     * @returns A ccColor4B if it could be successfully parsed, or an error 
+     * indicating the failure reason
+     */
+    GEODE_DLL Result<Color4B> cc4bFromHexString(std::string const& hexValue, bool requireAlpha = false, bool permissive = false);
+    GEODE_DLL std::string cc3bToHexString(Color3B const& color);
+    GEODE_DLL std::string cc4bToHexString(Color4B const& color);
 }
 
 template<>

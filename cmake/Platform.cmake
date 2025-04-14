@@ -134,6 +134,48 @@ elseif (GEODE_TARGET_PLATFORM STREQUAL "Win64")
 	else()
 		set(GEODE_TARGET_PLATFORM_SHORT "win")
 	endif()
+elseif (GEODE_TARGET_PLATFORM STREQUAL "Win32")
+	set_target_properties(${PROJECT_NAME} PROPERTIES
+		SYSTEM_NAME Win32
+		GENERATOR_PLATFORM x86
+	)
+
+	target_compile_definitions(${PROJECT_NAME} INTERFACE NOMINMAX)
+
+	target_link_libraries(${PROJECT_NAME} INTERFACE 
+		${GEODE_LOADER_PATH}/include/link/win32/libcocos2d.lib
+		${GEODE_LOADER_PATH}/include/link/win32/libExtensions.lib
+		${GEODE_LOADER_PATH}/include/link/win32/glew32.lib
+		${GEODE_LOADER_PATH}/include/link/win32/fmod.lib
+		opengl32
+	)
+
+	if (PROJECT_IS_TOP_LEVEL AND CMAKE_BUILD_TYPE STREQUAL "Debug")
+		target_link_libraries(${PROJECT_NAME} INTERFACE
+			${GEODE_LOADER_PATH}/include/link/win32/gd-libcurl.lib
+		)
+	else()
+		target_link_libraries(${PROJECT_NAME} INTERFACE
+			${GEODE_LOADER_PATH}/include/link/win32/ssl.lib
+			${GEODE_LOADER_PATH}/include/link/win32/crypto.lib
+			${GEODE_LOADER_PATH}/include/link/win32/nghttp2.lib
+			${GEODE_LOADER_PATH}/include/link/win32/ngtcp2.lib
+			${GEODE_LOADER_PATH}/include/link/win32/nghttp3.lib
+			${GEODE_LOADER_PATH}/include/link/win32/ngtcp2_crypto_boringssl.lib
+			${GEODE_LOADER_PATH}/include/link/win32/libcurl.lib
+		)
+	endif()
+
+	# Windows links against .lib and not .dll
+	set(GEODE_OUTPUT_NAME "Geode.x86")
+	set(GEODE_PLATFORM_BINARY "Geode.x86.lib")
+	set(GEODE_MOD_BINARY_SUFFIX ".x86.dll" CACHE STRING "" FORCE)
+
+	if (NOT ${PROJECT_NAME} STREQUAL ${CMAKE_PROJECT_NAME})
+		set(GEODE_TARGET_PLATFORM_SHORT "win32" PARENT_SCOPE)
+	else()
+		set(GEODE_TARGET_PLATFORM_SHORT "win32")
+	endif()
 elseif (GEODE_TARGET_PLATFORM STREQUAL "Android32")
 	set_target_properties(${PROJECT_NAME} PROPERTIES
 		SYSTEM_NAME Android

@@ -147,6 +147,7 @@ static void printAddr(std::ostream& stream, void const* addr, bool fullPath = tr
                     proc, static_cast<DWORD64>(reinterpret_cast<uintptr_t>(addr)), &displacement,
                     symbolInfo
                 )) {
+                #if GEODE_IS_WINDOWS64
                 if (auto entry = SymFunctionTableAccess64(proc, static_cast<DWORD64>(reinterpret_cast<uintptr_t>(addr)))) {
                     auto moduleBase = SymGetModuleBase64(proc, static_cast<DWORD64>(reinterpret_cast<uintptr_t>(addr)));
                     auto runtimeFunction = static_cast<PRUNTIME_FUNCTION>(entry);
@@ -163,6 +164,7 @@ static void printAddr(std::ostream& stream, void const* addr, bool fullPath = tr
                         return;
                     }
                 }
+                #endif
                 stream << " (" << std::string(symbolInfo->Name, symbolInfo->NameLen) << " + "
                        << displacement;
 
@@ -185,9 +187,11 @@ static void printAddr(std::ostream& stream, void const* addr, bool fullPath = tr
     else {
         stream << addr;
 
+#if GEODE_IS_WINDOWS64
         if (GeodeFunctionTableAccess64(proc, reinterpret_cast<DWORD64>(addr))) {
             stream << " (Hook handler)";
         }
+#endif
     }
 }
 
@@ -218,14 +222,14 @@ static std::string getStacktrace(PCONTEXT context, Mod*& suspectedFaultyMod) {
     while (true) {
         if (!StackWalk64(
                 IMAGE_FILE_MACHINE_AMD64, process, thread, &stack, context, nullptr,
-                +[](HANDLE hProcess, DWORD64 AddrBase) {
+                [](HANDLE hProcess, DWORD64 AddrBase) {
                     auto ret = GeodeFunctionTableAccess64(hProcess, AddrBase);
                     if (ret) {
                         return ret;
                     }
                     return SymFunctionTableAccess64(hProcess, AddrBase);
                 }, 
-                +[](HANDLE hProcess, DWORD64 dwAddr) -> DWORD64 {
+                [](HANDLE hProcess, DWORD64 dwAddr) -> DWORD64 {
                     auto ret = GeodeFunctionTableAccess64(hProcess, dwAddr);
                     if (ret) {
                         return dwAddr & (~0xffffull);

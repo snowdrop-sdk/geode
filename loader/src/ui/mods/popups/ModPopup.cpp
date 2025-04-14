@@ -1155,7 +1155,7 @@ bool ModPopup::availableForInstall() const {
 
         if (
             (gameVersion == "0.000") || 
-            (gameVersion && gameVersion != "*" && gameVersion != GEODE_STR(GEODE_GD_VERSION)) || 
+            (gameVersion && gameVersion != "*" && gameVersion != GEODE_STR(GEODE_GAME_VERSION)) || 
             (!Loader::get()->isModVersionSupported(version.getGeodeVersion()))) {
             return false;
         } 

@@ -4,7 +4,9 @@
 #include "../platform/cplatform.h"
 
 #include <Geode/DefaultInclude.hpp>
+#if 0
 #include <ccTypes.h>
+#endif
 #include <chrono>
 #include <filesystem>
 #include <matjson.hpp>
@@ -17,17 +19,22 @@
 
 namespace geode {
     // these are here because theyre special :-)
+    #if 0
     GEODE_DLL std::string format_as(cocos2d::CCObject const*);
     GEODE_DLL std::string format_as(cocos2d::CCArray*);
     GEODE_DLL std::string format_as(cocos2d::CCNode*);
+    #endif
     class Mod;
     GEODE_DLL std::string format_as(Mod*);
 }
-
+namespace geode::log::impl {
+    template <class... Args>
+    using FmtStr = fmt::format_string<Args...>;
+}
+#if 0
 namespace geode::log::impl {
     // What is this all for? well, fmtlib disallows writing custom formatters for non-void pointer types.
     // So instead, we just wrap everything and pass it a string instead.
-
     template <class T>
     concept IsWrappedCocos = std::is_pointer_v<std::decay_t<T>> && requires(T ptr) { geode::format_as(ptr); };
 
@@ -59,6 +66,7 @@ namespace cocos2d {
     GEODE_DLL std::string format_as(cocos2d::CCRect const&);
     GEODE_DLL std::string format_as(cocos2d::CCSize const&);
 }
+#endif
 
 namespace gd {
     GEODE_INLINE GEODE_HIDDEN std::string format_as(gd::string const& value) {
@@ -83,11 +91,19 @@ namespace geode {
 
         GEODE_DLL void vlogImpl(Severity, Mod*, fmt::string_view format, fmt::format_args args);
 
+        #if 0
         template <typename... Args>
         inline void logImpl(Severity severity, Mod* mod, impl::FmtStr<Args...> str, Args&&... args) {
             [&]<typename... Ts>(Ts&&... args) {
                 vlogImpl(severity, mod, str, fmt::make_format_args(args...));
             }(impl::wrapCocosObj(args)...);
+        }
+        #endif
+        template <typename... Args>
+        inline void logImpl(Severity severity, Mod* mod, impl::FmtStr<Args...> str, Args&&... args) {
+            [&]<typename... Ts>(Ts&&... args) {
+                vlogImpl(severity, mod, str, fmt::make_format_args(args...));
+            }((args)...);
         }
 
         template <typename... Args>

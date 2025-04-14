@@ -86,12 +86,13 @@ public:
             if (!ModDownloadManager::get()->checkAutoConfirm()) {
                 // Throttle events to only once per frame to not cause a 
                 // billion UI updates at once 
-                if (m_scheduledEventForFrame != CCDirector::get()->getTotalFrames()) {
-                    m_scheduledEventForFrame = CCDirector::get()->getTotalFrames();
+                // TODO: alk, make this cocos agnostic
+                // if (m_scheduledEventForFrame != CCDirector::get()->getTotalFrames()) {
+                //     m_scheduledEventForFrame = CCDirector::get()->getTotalFrames();
                     Loader::get()->queueInMainThread([id = m_id]() {
                         ModDownloadEvent(id).post();
                     });
-                }
+                // }
             }
         });
         auto fetchVersion = version.has_value() ? ModVersion(*version) : ModVersion(ModVersionLatest());
@@ -169,12 +170,13 @@ public:
             }
             // Throttle events to only once per frame to not cause a 
             // billion UI updates at once 
-            if (m_scheduledEventForFrame != CCDirector::get()->getTotalFrames()) {
-                m_scheduledEventForFrame = CCDirector::get()->getTotalFrames();
+            // TODO: alk make this cocos agnostic
+            // if (m_scheduledEventForFrame != CCDirector::get()->getTotalFrames()) {
+            //     m_scheduledEventForFrame = CCDirector::get()->getTotalFrames();
                 Loader::get()->queueInMainThread([id = m_id]() {
                     ModDownloadEvent(id).post();
                 });
-            }
+            // }
         });
 
         auto req = web::WebRequest();

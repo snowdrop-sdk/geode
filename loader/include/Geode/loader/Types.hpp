@@ -101,6 +101,50 @@ namespace geode {
     }
 
     using ModJson = matjson::Value;
+
+    struct Color3B {
+        uint8_t r;
+        uint8_t g;
+        uint8_t b;
+
+        constexpr bool operator==(Color3B const& other) const {
+            return r == other.r && g == other.g && b == other.b;
+        }
+
+        constexpr bool operator!=(Color3B const& other) const {
+            return !(*this == other);
+        }
+    };
+
+    struct Color4B {
+        uint8_t r;
+        uint8_t g;
+        uint8_t b;
+        uint8_t a;
+
+        constexpr bool operator==(Color4B const& other) const {
+            return r == other.r && g == other.g && b == other.b && a == other.a;
+        }
+
+        constexpr bool operator!=(Color4B const& other) const {
+            return !(*this == other);
+        }
+    };
+
+    struct Color4F {
+        float r;
+        float g;
+        float b;
+        float a;
+
+        constexpr bool operator==(Color4F const& other) const {
+            return r == other.r && g == other.g && b == other.b && a == other.a;
+        }
+
+        constexpr bool operator!=(Color4F const& other) const {
+            return !(*this == other);
+        }
+    };
 }
 
 /**

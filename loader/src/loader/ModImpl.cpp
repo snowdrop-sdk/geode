@@ -66,7 +66,9 @@ Result<> Mod::Impl::setup() {
 
         // Hi, linux bros!
         Loader::get()->queueInMainThread([searchPathRoot]() {
+            #if 0
             CCFileUtils::get()->addSearchPath(searchPathRoot.string().c_str());
+            #endif
         });
 
         // binaries on macos are merged, so make the platform binaries merged as well

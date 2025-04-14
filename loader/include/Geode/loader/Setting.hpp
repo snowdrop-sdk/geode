@@ -17,15 +17,9 @@ namespace geode {
     using FileSetting = FileSettingV3;
     using Color3BSetting = Color3BSettingV3;
     using Color4BSetting = Color4BSettingV3;
-    
-    using SettingNode = SettingNodeV3;
-    template <class S>
-    using SettingValueNode = SettingValueNodeV3<S>;
 
     using SettingChangedEvent = SettingChangedEventV3;
     using SettingChangedFilter = SettingChangedFilterV3;
-    using SettingNodeSizeChangeEvent = SettingNodeSizeChangeEventV3;
-    using SettingNodeValueChangeEvent = SettingNodeValueChangeEventV3;
 
     template <class T, class Lambda>
     EventListener<SettingChangedFilter>* listenForSettingChanges(std::string_view settingKey, Lambda&& callback, Mod* mod = getMod()) {

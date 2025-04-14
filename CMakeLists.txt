@@ -67,7 +67,7 @@ endif()
 
 # Allow users to have their own copy of bindings that can be overwritten with a CMake option.
 # If the option is not provided, by default just clone bindings with CPM and use that
-if (DEFINED ENV{GEODE_BINDINGS_REPO_PATH})
+if (NOT DEFINED GEODE_BINDINGS_REPO_PATH AND DEFINED ENV{GEODE_BINDINGS_REPO_PATH})
 	set(temp $ENV{GEODE_BINDINGS_REPO_PATH})
 	# this is so stupid i hate windows paths
 	string(REPLACE "\\" "/" GEODE_BINDINGS_REPO_PATH ${temp})
@@ -194,16 +194,16 @@ set(GEODE_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 include(cmake/Platform.cmake)
 include(cmake/GeodeFile.cmake)
 
-if (NOT DEFINED GEODE_GD_VERSION)
-	set(GEODE_GD_VERSION 2.2074)
-	set(GEODE_COMP_GD_VERSION 22074)
+if (NOT DEFINED GEODE_GAME_VERSION)
+	set(GEODE_GAME_VERSION 1.4.4.0)
+	set(GEODE_COMP_GD_VERSION 1040400)
 endif()
 
 target_compile_definitions(
 	${PROJECT_NAME} INTERFACE
-	GEODE_GD_VERSION=${GEODE_GD_VERSION}
+	GEODE_GAME_VERSION=${GEODE_GAME_VERSION}
 	GEODE_COMP_GD_VERSION=${GEODE_COMP_GD_VERSION}
-	GEODE_GD_VERSION_STRING="${GEODE_GD_VERSION}"
+	GEODE_GAME_VERSION_STRING="${GEODE_GAME_VERSION}"
 )
 
 if (WIN32)
@@ -263,7 +263,7 @@ set(CMAKE_WARN_DEPRECATED OFF CACHE BOOL "" FORCE)
 
 # Allow users to have their own copy of TulipHook that can be overwritten with a CMake option.
 # If the option is not provided, by default just clone TulipHook with CPM and use that
-if (DEFINED ENV{GEODE_TULIPHOOK_REPO_PATH})
+if (NOT DEFINED GEODE_TULIPHOOK_REPO_PATH AND DEFINED ENV{GEODE_TULIPHOOK_REPO_PATH})
 	set(temp $ENV{GEODE_TULIPHOOK_REPO_PATH})
 	# this is so stupid i hate windows paths
 	string(REPLACE "\\" "/" GEODE_TULIPHOOK_REPO_PATH ${temp})

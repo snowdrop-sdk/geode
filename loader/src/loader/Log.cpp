@@ -30,6 +30,7 @@ std::string geode::format_as(Mod* mod) {
     }
 }
 
+#if 0
 std::string geode::format_as(CCObject const* obj) {
     if (obj) {
         // TODO: try catch incase typeid fails
@@ -95,7 +96,7 @@ std::string cocos2d::format_as(cocos2d::ccColor4B const& col) {
 std::string cocos2d::format_as(cocos2d::ccColor4F const& col) {
     return fmt::format("rgba({}, {}, {}, {})", col.r, col.g, col.b, col.a);
 }
-
+#endif
 // Log
 
 inline static thread_local int32_t s_nestLevel = 0;

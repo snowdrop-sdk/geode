@@ -8,7 +8,6 @@
 #include "casts.hpp"
 
 #include <Geode/DefaultInclude.hpp>
-#include <cocos-ext.h>
 #include <concepts>
 #include <cstdlib>
 #include <stddef.h>
