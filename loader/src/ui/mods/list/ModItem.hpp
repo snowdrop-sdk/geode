@@ -105,4 +105,7 @@ public:
     void updateDisplay(float width, ModListDisplay display);
 
     ModSource& getSource() &;
+
+    static CCNode* createModLogo(ModSource const& source); 
+    CCNode* createModLogo() const;
 };

@@ -15,6 +15,7 @@
 #include "../settings/ModSettingsPopup.hpp"
 #include "../../../internal/about.hpp"
 #include "../../GeodeUIEvent.hpp"
+#include "../list/ModItem.hpp"
 #include "server/DownloadManager.hpp"
 
 class FetchTextArea : public CCNode {
@@ -113,7 +114,7 @@ bool ModPopup::setup(ModSource&& src) {
     titleContainer->setContentSize({ leftColumn->getContentWidth(), 25 });
     titleContainer->setAnchorPoint({ .5f, .5f });
 
-    auto logo = m_source.createModLogo();
+    auto logo = ModItem::createModLogo(m_source);
     logo->setID("mod-logo");
     limitNodeSize(
         logo,

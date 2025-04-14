@@ -88,3 +88,11 @@ public:
     void activateSearch(bool activate);
     void setIsExiting(bool exiting);
 };
+
+class GeodeModListPage : public ModListPage {
+protected:
+    std::vector<ModSource> m_mods;
+    
+public:
+    void addModSource(ModSource&& source) override;
+};

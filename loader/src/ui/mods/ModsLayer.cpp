@@ -16,7 +16,7 @@
 #include <Geode/binding/MenuLayer.hpp>
 #include "popups/ConfirmInstall.hpp"
 #include "GeodeStyle.hpp"
-#include "ui/mods/sources/ModListSource.hpp"
+#include "loader/sources/ModListSource.hpp"
 #include <loader/LoaderImpl.hpp>
 
 bool ModsStatusNode::init() {

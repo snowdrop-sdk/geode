@@ -9,7 +9,7 @@
 #include <Geode/loader/Setting.hpp>
 #include <loader/SettingNode.hpp>
 // needed for weightedFuzzyMatch
-#include <ui/mods/sources/ModListSource.hpp>
+#include <loader/sources/ModListSource.hpp>
 
 static bool matchSearch(SettingNode* node, std::string const& query) {
     if (typeinfo_cast<TitleSettingNode*>(node)) {

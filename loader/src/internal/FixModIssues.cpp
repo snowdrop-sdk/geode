@@ -2,7 +2,7 @@
 #include <Geode/loader/Loader.hpp>
 #include <Geode/utils/bridge.hpp>
 #include <server/DownloadManager.hpp>
-#include <ui/mods/sources/ModSource.hpp>
+#include <loader/sources/ModSource.hpp>
 #include <vector>
 #include <deque>
 

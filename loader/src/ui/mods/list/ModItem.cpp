@@ -13,7 +13,7 @@
 #include "ui/mods/popups/ModPopup.hpp"
 #include "ui/mods/popups/DevPopup.hpp"
 #include "ui/mods/popups/ModErrorPopup.hpp"
-#include "ui/mods/sources/ModSource.hpp"
+#include "loader/sources/ModSource.hpp"
 #include "ui/GeodeUIEvent.hpp"
 
 bool ModItem::init(ModSource&& source) {
@@ -31,7 +31,7 @@ bool ModItem::init(ModSource&& source) {
     m_bg->setScale(.7f);
     this->addChildAtPosition(m_bg, Anchor::Center);
 
-    m_logo = m_source.createModLogo();
+    m_logo = this->createModLogo();
     m_logo->setID("logo-sprite");
     this->addChild(m_logo);
 
@@ -854,4 +854,18 @@ ModItem* ModItem::create(ModSource&& source) {
 
 ModSource& ModItem::getSource() & {
     return m_source;
+}
+
+CCNode* ModItem::createModLogo(ModSource const& source) {
+    return source.visit(makeVisitor {
+        [](Mod* mod) {
+            return geode::createModLogo(mod);
+        },
+        [](server::ServerModMetadata const& metadata) {
+            return createServerModLogo(metadata.id);
+        },
+    }, m_value);
+}
+CCNode* ModItem::createModLogo() const {
+    return ModItem::createModLogo(m_source);
 }

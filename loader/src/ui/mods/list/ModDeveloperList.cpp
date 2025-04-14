@@ -11,7 +11,7 @@
 #include <GUI/CCControlExtension/CCScale9Sprite.h>
 
 #include "ui/mods/list/ModDeveloperItem.hpp"
-#include "ui/mods/sources/ModSource.hpp"
+#include "loader/sources/ModSource.hpp"
 
 bool ModDeveloperList::init(DevListPopup* popup, ModSource const& source, CCSize const& size) {
     if (!CCNode::init()) {

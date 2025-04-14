@@ -7,7 +7,7 @@
 #include <Geode/ui/ScrollLayer.hpp>
 #include <GUI/CCControlExtension/CCScale9Sprite.h>
 #include "ui/mods/popups/DevPopup.hpp"
-#include "ui/mods/sources/ModSource.hpp"
+#include "loader/sources/ModSource.hpp"
 
 using namespace geode::prelude;
 

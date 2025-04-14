@@ -70,6 +70,7 @@ file(GLOB SOURCES CONFIGURE_DEPENDS
 	src/internal/*.cpp
 	src/server/*.cpp
 	src/loader/*.cpp
+	src/loader/sources/*.cpp
 	src/load.cpp
 	src/utils/*.cpp
 	# src/ui/*.cpp

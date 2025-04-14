@@ -2,7 +2,7 @@
 #include "DevPopup.hpp"
 #include "../UpdateModListState.hpp"
 #include "ui/mods/list/ModDeveloperList.hpp"
-#include "ui/mods/sources/ModSource.hpp"
+#include "loader/sources/ModSource.hpp"
 
 bool DevListPopup::setup(ModSource const& meta) {
 

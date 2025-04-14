@@ -404,7 +404,7 @@ void ModList::onPromise(ModListSource::PageLoadTask::Event* event) {
             // Hide status
             m_statusContainer->setVisible(false);
 
-            auto list = result->unwrap();
+            auto& list = std::static_pointer_cast<GeodeModListPage>(result->unwrap())->m_mods;
 
             // Create items
             bool first = true;
@@ -672,7 +672,9 @@ void ModList::gotoPage(size_t page, bool update) {
     
     // Start loading new page with generic loading message
     this->showStatus(ModListUnkProgressStatus(), "Loading...");
-    m_listener.setFilter(m_source->loadPage(page, update));
+    m_listener.setFilter(m_source->loadPage(page, []() -> std::shared_ptr<ModListPage> {
+        return std::make_unique<GeodeModListPage>();
+    }, update));
 
     // Do initial eager update on page UI (to prevent user spamming arrows 
     // to access invalid pages)
@@ -759,4 +761,8 @@ ModList* ModList::create(ModListSource* src, CCSize const& size) {
     }
     delete ret;
     return nullptr;
+}
+
+void GeodeModListPage::addModSource(ModListSource&& source) {
+    m_mods.push_back(std::move(source));
 }
