@@ -53,13 +53,13 @@ struct AddCallToType<Ret(*)(Args...)> {
 #ifdef GEODE_IS_WINDOWS64
 #pragma comment(linker, "/export:XInputGetState,@2")
 #else
-#pragma comment(linker, "/export:XInputGetState=_XInputGetState")
+#pragma comment(linker, "/export:XInputGetState=_XInputGetState@8,@2")
 #endif
-extern "C" DWORD XInputGetState(DWORD dwUserIndex, XINPUT_STATE *pState) {
+extern "C" DWORD WINAPI XInputGetState(DWORD dwUserIndex, XINPUT_STATE *pState) {
     static auto fp = getFP("XInputGetState");
     if (fp) {
         using FPType = decltype(&XInputGetState);
-        return reinterpret_cast<AddCallToType<FPType>::type>(fp)(dwUserIndex, pState);
+        return reinterpret_cast<FPType>(fp)(dwUserIndex, pState);
     }
 
     return ERROR_DEVICE_NOT_CONNECTED;
@@ -68,13 +68,13 @@ extern "C" DWORD XInputGetState(DWORD dwUserIndex, XINPUT_STATE *pState) {
 #ifdef GEODE_IS_WINDOWS64
 #pragma comment(linker, "/export:XInputSetState,@3")
 #else
-#pragma comment(linker, "/export:XInputSetState=_XInputSetState")
+#pragma comment(linker, "/export:XInputSetState=_XInputSetState@8,@3")
 #endif
-extern "C" DWORD XInputSetState(DWORD dwUserIndex, XINPUT_VIBRATION* pVibration) {
+extern "C" DWORD WINAPI XInputSetState(DWORD dwUserIndex, XINPUT_VIBRATION* pVibration) {
     static auto fp = getFP("XInputSetState");
     if (fp) {
         using FPType = decltype(&XInputSetState);
-        return reinterpret_cast<AddCallToType<FPType>::type>(fp)(dwUserIndex, pVibration);
+        return reinterpret_cast<FPType>(fp)(dwUserIndex, pVibration);
     }
 
     return ERROR_DEVICE_NOT_CONNECTED;
@@ -83,13 +83,13 @@ extern "C" DWORD XInputSetState(DWORD dwUserIndex, XINPUT_VIBRATION* pVibration)
 #ifdef GEODE_IS_WINDOWS64
 #pragma comment(linker, "/export:XInputGetCapabilities,@4")
 #else
-#pragma comment(linker, "/export:XInputGetCapabilities=_XInputGetCapabilities")
+#pragma comment(linker, "/export:XInputGetCapabilities=_XInputGetCapabilities@12,@4")
 #endif
-extern "C" DWORD XInputGetCapabilities(DWORD dwUserIndex, DWORD dwFlags, XINPUT_CAPABILITIES *pCapabilities) {
+extern "C" DWORD WINAPI XInputGetCapabilities(DWORD dwUserIndex, DWORD dwFlags, XINPUT_CAPABILITIES *pCapabilities) {
     static auto fp = getFP("XInputGetCapabilities");
     if (fp) {
         using FPType = decltype(&XInputGetCapabilities);
-        return reinterpret_cast<AddCallToType<FPType>::type>(fp)(dwUserIndex, dwFlags, pCapabilities);
+        return reinterpret_cast<FPType>(fp)(dwUserIndex, dwFlags, pCapabilities);
     }
 
     return ERROR_DEVICE_NOT_CONNECTED;
