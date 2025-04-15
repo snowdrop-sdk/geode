@@ -5,10 +5,15 @@
 #include <filesystem>
 
 #if defined(WIN64) || defined(_WIN64) || defined(__WIN64) && !defined(__CYGWIN__)
+#define GEODE_IS_WINDOWS64 1
 #define GEODE_CALL 
 #else
+#define GEODE_IS_WINDOWS32 1
 #define GEODE_CALL __stdcall
 #endif
+
+#define GEODE_LSTR2(x) L#x
+#define GEODE_LSTR(x) GEODE_LSTR2(x)
 
 struct XINPUT_STATE;
 struct XINPUT_CAPABILITIES;
@@ -22,7 +27,7 @@ static HMODULE getXInput() {
         auto size = GetSystemDirectoryW(path.data(), path.size());
         if (size) {
             path.resize(size);
-            return LoadLibraryW((path + L"\\XInput1_4.dll").c_str());
+            return LoadLibraryW((path + L"\\" + GEODE_LSTR(GEODE_LAUNCHER_OUTPUT_NAME)).c_str());
         }
         return NULL;
     }();
@@ -37,38 +42,58 @@ static FARPROC getFP(const std::string& sym) {
     return NULL;
 }
 
-// #pragma comment(linker, "/export:XInputGetState,@2")
-// extern "C" DWORD XInputGetState(DWORD dwUserIndex, XINPUT_STATE *pState) {
-//     static auto fp = getFP("XInputGetState");
-//     if (fp) {
-//         using FPType = decltype(&XInputGetState);
-//         return reinterpret_cast<FPType>(fp)(dwUserIndex, pState);
-//     }
+template <typename T>
+struct AddCallToType {};
 
-//     return ERROR_DEVICE_NOT_CONNECTED;
-// }
+template <typename Ret, typename... Args>
+struct AddCallToType<Ret(*)(Args...)> {
+    using type = Ret(GEODE_CALL *)(Args...);
+};
 
-// #pragma comment(linker, "/export:XInputSetState,@3")
-// extern "C" DWORD XInputSetState(DWORD dwUserIndex, XINPUT_VIBRATION* pVibration) {
-//     static auto fp = getFP("XInputSetState");
-//     if (fp) {
-//         using FPType = decltype(&XInputSetState);
-//         return reinterpret_cast<FPType>(fp)(dwUserIndex, pVibration);
-//     }
+#ifdef GEODE_IS_WINDOWS64
+#pragma comment(linker, "/export:XInputGetState,@2")
+#else
+#pragma comment(linker, "/export:XInputGetState=_XInputGetState")
+#endif
+extern "C" DWORD XInputGetState(DWORD dwUserIndex, XINPUT_STATE *pState) {
+    static auto fp = getFP("XInputGetState");
+    if (fp) {
+        using FPType = decltype(&XInputGetState);
+        return reinterpret_cast<AddCallToType<FPType>::type>(fp)(dwUserIndex, pState);
+    }
 
-//     return ERROR_DEVICE_NOT_CONNECTED;
-// }
+    return ERROR_DEVICE_NOT_CONNECTED;
+}
 
-// #pragma comment(linker, "/export:XInputGetCapabilities,@4")
-// extern "C" DWORD XInputGetCapabilities(DWORD dwUserIndex, DWORD dwFlags, XINPUT_CAPABILITIES *pCapabilities) {
-//     static auto fp = getFP("XInputGetCapabilities");
-//     if (fp) {
-//         using FPType = decltype(&XInputGetCapabilities);
-//         return reinterpret_cast<FPType>(fp)(dwUserIndex, dwFlags, pCapabilities);
-//     }
+#ifdef GEODE_IS_WINDOWS64
+#pragma comment(linker, "/export:XInputSetState,@3")
+#else
+#pragma comment(linker, "/export:XInputSetState=_XInputSetState")
+#endif
+extern "C" DWORD XInputSetState(DWORD dwUserIndex, XINPUT_VIBRATION* pVibration) {
+    static auto fp = getFP("XInputSetState");
+    if (fp) {
+        using FPType = decltype(&XInputSetState);
+        return reinterpret_cast<AddCallToType<FPType>::type>(fp)(dwUserIndex, pVibration);
+    }
 
-//     return ERROR_DEVICE_NOT_CONNECTED;
-// }
+    return ERROR_DEVICE_NOT_CONNECTED;
+}
+
+#ifdef GEODE_IS_WINDOWS64
+#pragma comment(linker, "/export:XInputGetCapabilities,@4")
+#else
+#pragma comment(linker, "/export:XInputGetCapabilities=_XInputGetCapabilities")
+#endif
+extern "C" DWORD XInputGetCapabilities(DWORD dwUserIndex, DWORD dwFlags, XINPUT_CAPABILITIES *pCapabilities) {
+    static auto fp = getFP("XInputGetCapabilities");
+    if (fp) {
+        using FPType = decltype(&XInputGetCapabilities);
+        return reinterpret_cast<AddCallToType<FPType>::type>(fp)(dwUserIndex, dwFlags, pCapabilities);
+    }
+
+    return ERROR_DEVICE_NOT_CONNECTED;
+}
 
 static std::wstring getErrorString(DWORD error) {
     return L"Could not load Geode! Error code: " + std::to_wstring(error);
@@ -125,7 +150,7 @@ BOOL WINAPI DllMain(HINSTANCE module, DWORD reason, LPVOID _) {
         DisableThreadLibraryCalls(module);
 
         // This is UB.
-        if (LoadLibraryW(L"Geode.dll") == NULL) {
+        if (LoadLibraryW(GEODE_LSTR(GEODE_OUTPUT_NAME) L".dll") == NULL) {
             const auto param = reinterpret_cast<LPVOID>(static_cast<size_t>(GetLastError()));
             CreateThread(NULL, 0, &errorThread, param, 0, NULL);
         }

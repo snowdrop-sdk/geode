@@ -133,6 +133,9 @@ void patchDelayLoad() {
 #endif
 }
 
+std::array<uint32_t, 32> mainOriginalStore;
+size_t mainOriginalStoreSize;
+void* mainAddr;
 void* mainTrampolineAddr;
 
 #include "gdTimestampMap.hpp"
@@ -177,6 +180,13 @@ int WINAPI gdMainHook(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmd
             return exitCode;
     }
 
+    auto process = GetCurrentProcess();
+    DWORD oldProtect;
+    if (!VirtualProtectEx(process, mainAddr, mainOriginalStoreSize, PAGE_EXECUTE_READWRITE, &oldProtect))
+        return -1;
+    std::memcpy(mainAddr, mainOriginalStore.data(), mainOriginalStoreSize);
+    VirtualProtectEx(process, mainAddr, mainOriginalStoreSize, oldProtect, &oldProtect);
+
     return reinterpret_cast<decltype(&wWinMain)>(mainTrampolineAddr)(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
 }
 
@@ -186,6 +196,14 @@ int WINAPI gdMainHook(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmd
 #else
 #define MSG_BOX_DEBUG(...)
 #endif
+
+struct SmallStackStr {
+    char data[32];
+    size_t size = 0;
+    SmallStackStr(const char* str, size_t size) : size(size) {
+        std::memcpy(data, str, size);
+    }
+};
 
 std::string loadGeode() {
     auto process = GetCurrentProcess();
@@ -230,7 +248,7 @@ std::string loadGeode() {
 
     // the search bytes for the main function
     // 32 bit:
-    // 6a 00                  push 0
+    // 6a 00                  push 0 (or 57 push edi)
     // 68 00 00 40 00         push geode::base::get()
     // e8 ...                 call ...
 
@@ -242,10 +260,22 @@ std::string loadGeode() {
     // e8 ...                 call ...
 
     uint64_t mainSearchBytes = GEODE_WINDOWS64(0xd233c08b4ccb8b44) GEODE_WINDOWS32(0x004000006a006800);
-    constexpr ptrdiff_t mainSearchCallOffset = GEODE_WINDOWS64(15) GEODE_WINDOWS32(7);
+    SmallStackStr mainSearchStrs[] = {
+        GEODE_WINDOWS64(SmallStackStr("\x44\x8b\xcb\x4c\x8b\xc0\x33\xd2\x48\x8d\x0d", 11))
+        GEODE_WINDOWS32(SmallStackStr("\x6a\x00\x68\x00\x00\x40\x00", 7))
+        GEODE_WINDOWS32(, SmallStackStr("\x57\x68\x00\x00\x40\x00", 6))
+    };
+    constexpr ptrdiff_t mainSearchCallOffset = GEODE_WINDOWS64(4) GEODE_WINDOWS32(0);
 
 #ifdef GEODE_IS_WINDOWS32
     mainSearchBytes |= static_cast<uint64_t>(geode::base::get()) << 24;
+    auto baseCopy = geode::base::get();
+    std::memcpy(
+        mainSearchStrs[0].data + 3, &baseCopy, sizeof(baseCopy)
+    );
+    std::memcpy(
+        mainSearchStrs[1].data + 2, &baseCopy, sizeof(baseCopy)
+    );
 #endif
 
 #ifdef GEODE_IS_WINDOWS64
@@ -259,12 +289,23 @@ std::string loadGeode() {
     MSG_BOX_DEBUG("Searching from {:x}, aka {:x}", preWinMainAddr, preWinMainAddr - geode::base::get());
 
     uintptr_t patchAddr = 0;
+    uintptr_t foundOffset = 0;
     // 0x1000 should be enough of a limit here..
     for (auto searchAddr = preWinMainAddr; searchAddr < preWinMainAddr + 0x1000; searchAddr++) {
-        if (*reinterpret_cast<uint64_t*>(searchAddr) != mainSearchBytes)
-            continue;
+        bool found = false;
+        for (auto searchStr : mainSearchStrs) {
+            if (memcmp(reinterpret_cast<void*>(searchAddr), searchStr.data, searchStr.size) == 0) {
+                found = true;
+                foundOffset = searchStr.size;
+                break;
+            }
+        }
+        if (!found) continue;
+        MSG_BOX_DEBUG("Found main search bytes at {:x}", searchAddr - geode::base::get());
+        // if (*reinterpret_cast<uint64_t*>(searchAddr) != mainSearchBytes)
+        //     continue;
         // follow near call address, this is the call to main
-        const uintptr_t callAddress = searchAddr + mainSearchCallOffset;
+        const uintptr_t callAddress = searchAddr + mainSearchCallOffset + foundOffset;
         const int32_t callValue = *reinterpret_cast<int32_t*>(callAddress + 1);
         patchAddr = callAddress + callValue + 5;
         break;
@@ -283,16 +324,16 @@ std::string loadGeode() {
 #ifdef GEODE_IS_WINDOWS64
     constexpr size_t patchSize = 15;
 
-    uintptr_t jumpAddr = patchAddr + patchSize;
+    uintptr_t jumpAddr = patchAddr + 0;
     uint8_t trampolineBytes[trampolineSize] = {
-        // mov [rsp + 8], rbx
-        0x48, 0x89, 0x5c, 0x24, 0x08,
-        // mov [rsp + 10], rsi
-        0x48, 0x89, 0x74, 0x24, 0x10,
-        // mov [rsp + 18], rdi
-        0x48, 0x89, 0x7c, 0x24, 0x18,
-        // jmp [rip + 0] 
-        0xff, 0x25, 0x00, 0x00, 0x00, 0x00,
+        // // mov [rsp + 8], rbx
+        // 0x48, 0x89, 0x5c, 0x24, 0x08,
+        // // mov [rsp + 10], rsi
+        // 0x48, 0x89, 0x74, 0x24, 0x10,
+        // // mov [rsp + 18], rdi
+        // 0x48, 0x89, 0x7c, 0x24, 0x18,
+        // // jmp [rip + 0] 
+        // 0xff, 0x25, 0x00, 0x00, 0x00, 0x00,
         // pointer to main + 15
         static_cast<uint8_t>((jumpAddr >> 0) & 0xFF), static_cast<uint8_t>((jumpAddr >> 8) & 0xFF), static_cast<uint8_t>((jumpAddr >> 16) & 0xFF), static_cast<uint8_t>((jumpAddr >> 24) & 0xFF),
         static_cast<uint8_t>((jumpAddr >> 32) & 0xFF), static_cast<uint8_t>((jumpAddr >> 40) & 0xFF), static_cast<uint8_t>((jumpAddr >> 48) & 0xFF), static_cast<uint8_t>((jumpAddr >> 56) & 0xFF),
@@ -316,14 +357,14 @@ std::string loadGeode() {
     constexpr size_t patchSize = 6;
 
     uint8_t trampolineBytes[trampolineSize] = {
-        // push ebp
-        0x55,
-        // mov ebp, esp
-        0x8b, 0xec,
-        // and esp, ...
-        0x83, 0xe4, 0xf8, 
+        // // push ebp
+        // 0x55,
+        // // mov ebp, esp
+        // 0x8b, 0xec,
+        // // and esp, ...
+        // 0x83, 0xe4, 0xf8, 
         // jmp main + 6 (after our jmp detour)
-        0xe9, JMP_BYTES(reinterpret_cast<uintptr_t>(mainTrampolineAddr) + 6, patchAddr + patchSize)
+        0xe9, JMP_BYTES(reinterpret_cast<uintptr_t>(mainTrampolineAddr) + 0, patchAddr + 0)
     };
 
     std::memcpy(mainTrampolineAddr, trampolineBytes, trampolineSize);
@@ -336,11 +377,13 @@ std::string loadGeode() {
     };
 #endif
 
-    MSG_BOX_DEBUG("found the main address {:x}", patchAddr - geode::base::get());
-
+    MSG_BOX_DEBUG("found the main address {:x} (as {:x})", patchAddr, patchAddr - geode::base::get());
     DWORD oldProtect;
     if (!VirtualProtectEx(process, reinterpret_cast<void*>(patchAddr), patchSize, PAGE_EXECUTE_READWRITE, &oldProtect))
         return "Geode could not hook the main function, not loading Geode.";
+    mainAddr = reinterpret_cast<void*>(patchAddr);
+    mainOriginalStoreSize = patchSize;
+    std::memcpy(mainOriginalStore.data(), reinterpret_cast<void*>(patchAddr), patchSize);
     std::memcpy(reinterpret_cast<void*>(patchAddr), patchBytes, patchSize);
     VirtualProtectEx(process, reinterpret_cast<void*>(patchAddr), patchSize, oldProtect, &oldProtect);
     return "";
@@ -359,6 +402,14 @@ void earlyError(std::string message) {
     fout.close();
     console::messageBox("Unable to Load Geode!", message);
 }
+
+void geode::bridge::createGamePopup(std::string_view title, std::string_view text, std::string_view confirmText, std::string_view cancelText, std::function<void(bool)> callback) {
+    console::messageBox(
+        title.data(),
+        text.data()
+    );
+}
+
 
 BOOL WINAPI DllMain(HINSTANCE module, DWORD reason, LPVOID) {
     if (reason != DLL_PROCESS_ATTACH)

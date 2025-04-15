@@ -76,7 +76,8 @@ bool ModSettingsPopup::setup(Mod* mod) {
     for (auto& key : mod->getSettingKeys()) {
         SettingNode* node = nullptr;
         if (auto sett = mod->getSetting(key)) {
-            node = sett->createNode(layerSize.width);
+            auto visitor = new (std::nothrow) GeodeSettingNodeV3Visitor;
+            node = sett->createNode(layerSize.width, visitor);
         }
         if (!node) {
             node = UnresolvedCustomSettingNode::create(key, mod, layerSize.width);

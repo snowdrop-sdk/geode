@@ -101,7 +101,7 @@
         },
         "show-platform-console": {
             "type": "bool",
-            "default": false,
+            "default": true,
             "name": "Show Platform Console",
             "description": "Show the native console (if one exists). <cr>This setting is meant for developers</c>",
             "platforms": [
