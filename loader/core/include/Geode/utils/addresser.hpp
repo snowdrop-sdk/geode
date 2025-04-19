@@ -7,7 +7,7 @@
 #include "../utils/casts.hpp"
 #include "casts.hpp"
 
-#include <Geode/DefaultInclude.hpp>
+#include <Geode/core/Prelude.hpp>
 #include <concepts>
 #include <cstdlib>
 #include <stddef.h>

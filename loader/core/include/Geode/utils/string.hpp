@@ -1,10 +1,10 @@
 #pragma once
 
+#include "../core/Prelude.hpp"
 #include <string_view>
 #include <string>
 #include <vector>
 #include <compare>
-#include "../DefaultInclude.hpp"
 
 namespace geode::utils::string {
     /**

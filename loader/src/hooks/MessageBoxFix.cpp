@@ -1,5 +1,5 @@
 
-#include <Geode/DefaultInclude.hpp>
+#include <Geode/core/Prelude.hpp>
 
 #ifdef GEODE_IS_WINDOWS
 

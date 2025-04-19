@@ -1,12 +1,12 @@
-#include "hash.hpp"
+#include <Geode/utils/hash.hpp>
 
 // shh, its fine :-)
-#include "sha3.cpp"
+#include "hash/sha3.h"
 
 #include <string>
 #include <fstream>
 #include <ciso646>
-#include "picosha2.h"
+#include "hash/picosha2.h"
 #include <vector>
 
 template <class Func>

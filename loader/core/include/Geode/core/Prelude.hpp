@@ -1,5 +1,8 @@
 #pragma once
 
+#include "Macros.hpp"
+#include "../platform/Platform.hpp"
+
 // Because C++ doesn't like using
 // namespaces that don't exist
 namespace geode {

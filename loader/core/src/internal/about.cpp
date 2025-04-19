@@ -9,6 +9,6 @@ geode::VersionInfo about::getLoaderVersion() {
     };
 }
 const char* about::getLoaderVersionStr() { return "4.3.1"; }
-const char* about::getLoaderCommitHash() { return "426b1d1d-dirty"; }
+const char* about::getLoaderCommitHash() { return "01778a35-dirty"; }
 const char* about::getBindingsCommitHash() { return "a3f99680"; }
 const char* about::getLoaderModJson() { return R"JSON_SEPARATOR()JSON_SEPARATOR"; }

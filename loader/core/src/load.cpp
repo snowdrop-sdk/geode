@@ -1,9 +1,9 @@
 #include <loader/LoaderImpl.hpp>
 #include <loader/console.hpp>
-#include <loader/IPC.hpp>
+#include <loader/event/IPC.hpp>
 #include <loader/updater.hpp>
 
-#include <Geode/loader/IPC.hpp>
+#include <Geode/loader/event/IPC.hpp>
 #include <Geode/loader/Loader.hpp>
 #include <Geode/loader/Log.hpp>
 #include <Geode/loader/Mod.hpp>

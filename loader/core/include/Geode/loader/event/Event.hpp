@@ -1,6 +1,7 @@
 #pragma once
 
-#include "../utils/casts.hpp"
+#include "../../core/Prelude.hpp"
+#include "../../utils/casts.hpp"
 
 #include <type_traits>
 #include <mutex>

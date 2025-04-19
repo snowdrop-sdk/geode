@@ -1,4 +1,4 @@
-#include <Geode/DefaultInclude.hpp>
+#include <Geode/core/Prelude.hpp>
 
 #import <Cocoa/Cocoa.h>
 #include <objc/runtime.h>

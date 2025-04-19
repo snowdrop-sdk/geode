@@ -1,4 +1,4 @@
-#include <Geode/DefaultInclude.hpp>
+#include <Geode/core/Prelude.hpp>
 
 #include <cocos2d.h>
 using namespace cocos2d;

@@ -1,8 +1,8 @@
 #pragma once
 
-#include <Geode/loader/Mod.hpp>
-#include "../DefaultInclude.hpp"
-#include "../loader/Event.hpp"
+#include "../loader/event/Event.hpp"
+#include "../loader/Types.hpp"
+#include "../loader/Mod.hpp"
 
 namespace geode {
     struct GEODE_DLL ColorProvidedEvent final : public Event {

@@ -2,12 +2,11 @@
 
 #include <Geode/Result.hpp>
 #include "general.hpp"
-#include "../loader/Event.hpp"
+#include "../loader/event/Event.hpp"
 #include "Task.hpp"
 
 #include <matjson.hpp>
-#include <Geode/DefaultInclude.hpp>
-#include <Geode/utils/string.hpp>
+#include "string.hpp"
 #include <filesystem>
 #include <string>
 #include <unordered_set>

@@ -1,4 +1,4 @@
-#include <Geode/DefaultInclude.hpp>
+#include <Geode/core/Prelude.hpp>
 
 #include <Geode/loader/Dirs.hpp>
 #include <Geode/Utils.hpp>

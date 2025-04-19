@@ -13,7 +13,7 @@ using namespace geode::prelude;
 #include <Geode/loader/Log.hpp>
 #include <Geode/binding/MenuLayer.hpp>
 #include <Geode/Result.hpp>
-#include <Geode/DefaultInclude.hpp>
+#include <Geode/core/Prelude.hpp>
 #include <optional>
 #include <mutex>
 

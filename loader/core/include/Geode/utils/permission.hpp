@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Geode/DefaultInclude.hpp>
+#include <Geode/core/Prelude.hpp>
 #include <string_view>
 
 namespace geode::utils::permission {

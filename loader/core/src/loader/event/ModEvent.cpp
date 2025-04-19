@@ -1,4 +1,4 @@
-#include <Geode/loader/ModEvent.hpp>
+#include <Geode/loader/event/ModEvent.hpp>
 #include <Geode/loader/Mod.hpp>
 
 using namespace geode::prelude;

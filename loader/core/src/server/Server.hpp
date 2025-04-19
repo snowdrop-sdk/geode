@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Geode/utils/VersionInfo.hpp"
-#include <Geode/DefaultInclude.hpp>
+#include <Geode/core/Prelude.hpp>
 #include <Geode/utils/web.hpp>
 #include <chrono>
 #include <matjson.hpp>

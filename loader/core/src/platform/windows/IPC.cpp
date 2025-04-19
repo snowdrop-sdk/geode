@@ -1,5 +1,7 @@
-﻿#include <Geode/loader/IPC.hpp>
-#include <loader/IPC.hpp>
+﻿#include <Geode/loader/event/IPC.hpp>
+#include <loader/event/IPC.hpp>
+#include <Geode/utils/general.hpp>
+#include <Geode/loader/Log.hpp>
 
 #include <thread>
 #include <optional>

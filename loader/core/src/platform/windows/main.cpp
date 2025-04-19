@@ -1,7 +1,9 @@
-#include <Geode/DefaultInclude.hpp>
+#include <Geode/core/Prelude.hpp>
 
-#include "../load.hpp"
+#include <load.hpp>
 #include <Windows.h>
+#include <array>
+#include <Geode/utils/bridge.hpp>
 
 #include "loader/LoaderImpl.hpp"
 #include "loader/console.hpp"

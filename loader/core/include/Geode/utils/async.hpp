@@ -1,7 +1,7 @@
 #pragma once
 
 #include <coroutine>
-#include <Geode/DefaultInclude.hpp>
+#include <Geode/core/Prelude.hpp>
 #include "Task.hpp"
 
 namespace geode {

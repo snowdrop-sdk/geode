@@ -1,4 +1,4 @@
-﻿#include <Geode/DefaultInclude.hpp>
+﻿#include <Geode/core/Prelude.hpp>
 #include <loader/IPC.hpp>
 #include <Geode/loader/Log.hpp>
 

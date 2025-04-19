@@ -1,6 +1,7 @@
-#include <Geode/DefaultInclude.hpp>
+#include <Geode/core/Prelude.hpp>
 
 using namespace geode::prelude;
+#include <array>
 
 #include <Geode/loader/Dirs.hpp>
 #include "nfdwin.hpp"
@@ -8,6 +9,7 @@ using namespace geode::prelude;
 #include <processthreadsapi.h>
 #include <ShlObj.h>
 #include <shlwapi.h>
+#include <shellapi.h>
 #include <shobjidl.h>
 #include <Geode/utils/web.hpp>
 #include <Geode/loader/Log.hpp>

@@ -1,9 +1,11 @@
-#include <Geode/loader/IPC.hpp>
+#include <Geode/core/Prelude.hpp>
+#include <Geode/loader/event/IPC.hpp>
 #include <Geode/loader/Log.hpp>
 #include <loader/ModImpl.hpp>
 #include <loader/LoaderImpl.hpp>
 #include <Geode/utils/string.hpp>
 #include <processenv.h>
+#include <array>
 
 using namespace geode::prelude;
 

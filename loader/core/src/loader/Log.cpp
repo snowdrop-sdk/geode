@@ -17,7 +17,6 @@
 
 using namespace geode::prelude;
 using namespace geode::log;
-using namespace cocos2d;
 
 // Parse overloads
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <filesystem>
+#include "../core/Prelude.hpp"
 
 namespace geode::dirs {
     /**

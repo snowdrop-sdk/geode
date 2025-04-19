@@ -1,8 +1,8 @@
 #define WIN32_LEAN_AND_MEAN
 
-#include <Geode/DefaultInclude.hpp>
+#include <Geode/core/Prelude.hpp>
 
-#include <crashlog.hpp>
+#include <internal/crashlog.hpp>
 #include <Geode/loader/Dirs.hpp>
 #include <Geode/loader/Loader.hpp>
 #include <Geode/loader/Mod.hpp>

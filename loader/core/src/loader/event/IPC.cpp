@@ -1,4 +1,4 @@
-#include <Geode/loader/IPC.hpp>
+#include <Geode/loader/event/IPC.hpp>
 #include "IPC.hpp"
 #include <matjson.hpp>
 #include <Geode/loader/Mod.hpp>
@@ -56,4 +56,10 @@ matjson::Value ipc::processRaw(void* rawHandle, std::string const& buffer) {
     // ! warning: if the event system is ever made asynchronous this will break!
     IPCEvent(rawHandle, json["mod"].asString().unwrap(), json["message"].asString().unwrap(), data, reply).post();
     return reply;
+}
+
+void ipc::listen(std::string const& messageID, matjson::Value(*callback)(IPCEvent*)) {
+    (void) new EventListener(
+        callback, IPCFilter(getMod()->getID(), messageID)
+    );
 }

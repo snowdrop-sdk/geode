@@ -1,4 +1,4 @@
-#include "../platform/platform.hpp"
+#include "../core/Prelude.hpp"
 #include <string_view>
 
 namespace geode::bridge {

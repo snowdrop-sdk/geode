@@ -2,7 +2,7 @@
 
 #include <string>
 #include <matjson.hpp>
-#include <Geode/loader/Event.hpp>
+#include <Geode/loader/event/Event.hpp>
 
 namespace geode::updater {
     using UpdateFinished = std::monostate;

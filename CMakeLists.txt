@@ -241,51 +241,6 @@ if (ANDROID)
 	endif()
 endif()
 
-set(MAT_JSON_AS_INTERFACE ON)
-CPMAddPackage("gh:geode-sdk/result@1.3.3")
-CPMAddPackage("gh:geode-sdk/json@3.2.1")
-CPMAddPackage("gh:fmtlib/fmt#11.1.4")
-
-target_compile_definitions(${PROJECT_NAME} INTERFACE MAT_JSON_DYNAMIC=1)
-
-# this is needed for cross compilation on linux,
-# since fmtlib will fail to compile otherwise
-if (GEODE_DISABLE_FMT_CONSTEVAL)
-	message(VERBOSE "Disabling FMT_CONSTEVAL")
-	target_compile_definitions(fmt PUBLIC -DFMT_CONSTEVAL=)
-endif()
-
-# Tulip hook (hooking)
-if (PROJECT_IS_TOP_LEVEL AND NOT GEODE_BUILDING_DOCS)
-	set(TULIP_LINK_SOURCE ON)
-endif()
-set(CMAKE_WARN_DEPRECATED OFF CACHE BOOL "" FORCE)
-
-# Allow users to have their own copy of TulipHook that can be overwritten with a CMake option.
-# If the option is not provided, by default just clone TulipHook with CPM and use that
-if (NOT DEFINED GEODE_TULIPHOOK_REPO_PATH AND DEFINED ENV{GEODE_TULIPHOOK_REPO_PATH})
-	set(temp $ENV{GEODE_TULIPHOOK_REPO_PATH})
-	# this is so stupid i hate windows paths
-	string(REPLACE "\\" "/" GEODE_TULIPHOOK_REPO_PATH ${temp})
-endif()
-
-if (DEFINED GEODE_TULIPHOOK_REPO_PATH)
-	message(STATUS "Using ${GEODE_TULIPHOOK_REPO_PATH} for TulipHook")
-	add_subdirectory(${GEODE_TULIPHOOK_REPO_PATH} ${GEODE_TULIPHOOK_REPO_PATH}/build)
-else()
-	CPMAddPackage("gh:geode-sdk/TulipHook@2.4.3")
-endif()
-set(CMAKE_WARN_DEPRECATED ON CACHE BOOL "" FORCE)
-
-include(CheckCXXCompilerFlag)
-check_cxx_compiler_flag(-Wno-everything SUPPORTS_W_NO_EVERYTHING)
-if (SUPPORTS_W_NO_EVERYTHING)
-	# Silence warnings from dependencies
-	if (TARGET capstone)
-		target_compile_options(capstone PRIVATE -Wno-everything)
-	endif()
-endif()
-
 target_sources(${PROJECT_NAME} INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/entry.cpp)
 
 add_subdirectory(${GEODE_BINDINGS_REPO_PATH} ${CMAKE_BINARY_DIR}/bindings)
@@ -303,7 +258,6 @@ target_include_directories(GeodeBindings PUBLIC
 	${GEODE_LOADER_PATH}/include/Geode/fmod
 )
 target_link_directories(GeodeBindings PUBLIC ${GEODE_LOADER_PATH}/include/link)
-target_link_libraries(GeodeBindings PUBLIC fmt TulipHookInclude mat-json GeodeResult)
 target_link_libraries(${PROJECT_NAME} INTERFACE GeodeBindings)
 
 if (NOT EXISTS ${GEODE_BIN_PATH})

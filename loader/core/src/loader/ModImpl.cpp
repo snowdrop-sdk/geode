@@ -3,16 +3,16 @@
 #include "ModMetadataImpl.hpp"
 #include "HookImpl.hpp"
 #include "PatchImpl.hpp"
-#include "about.hpp"
+#include <internal/about.hpp>
 #include "console.hpp"
 
-#include <hash/hash.hpp>
+#include <Geode/utils/hash.hpp>
 #include <Geode/loader/Dirs.hpp>
 #include <Geode/loader/Hook.hpp>
 #include <Geode/loader/Loader.hpp>
 #include <Geode/loader/Log.hpp>
 #include <Geode/loader/Mod.hpp>
-#include <Geode/loader/ModEvent.hpp>
+#include <Geode/loader/event/ModEvent.hpp>
 #include <Geode/utils/file.hpp>
 #include <Geode/utils/JsonValidation.hpp>
 #include <optional>

@@ -1,8 +1,8 @@
 #pragma once
 
+#include "../core/Prelude.hpp"
 #include <Geode/Result.hpp>
 
-#include "../DefaultInclude.hpp"
 #include <chrono>
 #include <iomanip>
 #include <string>

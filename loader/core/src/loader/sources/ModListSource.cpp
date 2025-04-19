@@ -4,7 +4,7 @@
 #include <loader/LoaderImpl.hpp>
 
 #define FTS_FUZZY_MATCH_IMPLEMENTATION
-#include <Geode/external/fts/fts_fuzzy_match.h>
+#include <utils/fuzzy/fts_fuzzy_match.h>
 
 static std::vector<ModListSource*> ALL_EXTANT_SOURCES {};
 

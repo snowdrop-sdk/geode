@@ -8,7 +8,7 @@
  * Modified to be modern Geode-fitting C++
  */
 
-#include <Geode/DefaultInclude.hpp>
+#include <Geode/core/Prelude.hpp>
 
 #ifdef __MINGW32__
 // Explicitly setting NTDDI version, this is necessary for the MinGW compiler

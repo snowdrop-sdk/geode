@@ -1,4 +1,4 @@
-#include <Geode/loader/Event.hpp>
+#include <Geode/loader/event/Event.hpp>
 #include <Geode/utils/ranges.hpp>
 #include <mutex>
 

@@ -3,7 +3,7 @@
 #include <Geode/loader/Dirs.hpp>
 #include <Geode/utils/map.hpp>
 #include <optional>
-#include <hash/hash.hpp>
+#include <Geode/utils/hash.hpp>
 #include <loader/ModImpl.hpp>
 
 using namespace server;

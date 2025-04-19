@@ -1,7 +1,7 @@
 #pragma once
 
 #include "general.hpp"
-#include "../loader/Event.hpp"
+#include "../loader/event/Event.hpp"
 #include "../loader/Loader.hpp"
 #include <mutex>
 #include <string_view>

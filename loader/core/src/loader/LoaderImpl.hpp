@@ -1,6 +1,6 @@
 #pragma once
 
-#include "FileWatcher.hpp"
+#include <internal/FileWatcher.hpp>
 
 #include <matjson.hpp>
 #include <Geode/loader/Dirs.hpp>
@@ -11,7 +11,7 @@
 #include <Geode/utils/map.hpp>
 #include <Geode/utils/ranges.hpp>
 #include "ModImpl.hpp"
-#include <crashlog.hpp>
+#include <internal/crashlog.hpp>
 #include <mutex>
 #include <optional>
 #include <thread>

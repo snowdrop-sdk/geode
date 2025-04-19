@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Geode/DefaultInclude.hpp>
+#include <Geode/core/Prelude.hpp>
 #include <Geode/binding/ButtonSprite.hpp>
 #include <Geode/ui/General.hpp>
 #include <Geode/ui/IconButtonSprite.hpp>

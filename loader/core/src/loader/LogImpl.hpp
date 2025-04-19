@@ -1,6 +1,5 @@
 #pragma once
 
-#include <Geode/DefaultInclude.hpp>
 #include <Geode/loader/Log.hpp>
 #include <Geode/loader/Mod.hpp>
 #include <Geode/loader/Types.hpp>

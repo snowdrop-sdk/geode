@@ -1,11 +1,11 @@
 #define ISOLATION_AWARE_ENABLED 1
 
-#include <Windows.h>
-
 #include <Geode/loader/Log.hpp>
 #include <Geode/utils/file.hpp>
 #include <Geode/utils/general.hpp>
 
+#include <Windows.h>
+#include <playsoundapi.h>
 #include <string>
 #include <filesystem>
 

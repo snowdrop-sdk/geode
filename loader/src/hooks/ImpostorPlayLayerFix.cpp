@@ -1,4 +1,4 @@
-#include <Geode/DefaultInclude.hpp>
+#include <Geode/core/Prelude.hpp>
 #include <Geode/modify/LevelPage.hpp>
 
 using namespace geode::prelude;

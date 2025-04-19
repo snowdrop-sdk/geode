@@ -2,7 +2,7 @@
  * Adapted from https://gist.github.com/altalk23/29b97969e9f0624f783b673f6c1cd279
  */
 
-#include <Geode/DefaultInclude.hpp>
+#include <Geode/core/Prelude.hpp>
 #include <Geode/utils/addresser.hpp>
 #include <cstdlib>
 #include <stddef.h>

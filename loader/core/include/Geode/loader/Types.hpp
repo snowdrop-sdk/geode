@@ -1,10 +1,8 @@
 #pragma once
 
-#include "../DefaultInclude.hpp"
-#include "../platform/cplatform.h"
-#include <matjson.hpp>
-
+#include "../core/Prelude.hpp"
 #include <string>
+#include <matjson.hpp>
 
 namespace geode {
     /**

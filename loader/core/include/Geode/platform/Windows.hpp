@@ -4,6 +4,8 @@
 #pragma warning(disable : 4251) // dll-interface
 #pragma warning(disable : 4244) // narrowing conversion
 
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
 #include <Windows.h>
 #include <cstring>
 #include <type_traits>

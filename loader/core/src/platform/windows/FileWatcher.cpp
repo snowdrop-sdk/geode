@@ -1,4 +1,4 @@
-#include <FileWatcher.hpp>
+#include <internal/FileWatcher.hpp>
 #include <iostream>
 #include <thread>
 #include <Geode/utils/general.hpp>

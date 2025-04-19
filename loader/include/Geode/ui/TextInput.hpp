@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Geode/DefaultInclude.hpp>
+#include <Geode/core/Prelude.hpp>
 #include <Geode/binding/TextInputDelegate.hpp>
 #include <Geode/binding/CCTextInputNode.hpp>
 #include <cocos2d.h>

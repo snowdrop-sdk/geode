@@ -1,12 +1,8 @@
 #pragma once
 
 #include "Types.hpp"
-#include "../platform/cplatform.h"
+#include "../core/Prelude.hpp"
 
-#include <Geode/DefaultInclude.hpp>
-#if 0
-#include <ccTypes.h>
-#endif
 #include <chrono>
 #include <filesystem>
 #include <matjson.hpp>
@@ -67,13 +63,13 @@ namespace cocos2d {
     GEODE_DLL std::string format_as(cocos2d::CCSize const&);
 }
 #endif
-
+#if 0
 namespace gd {
     GEODE_INLINE GEODE_HIDDEN std::string format_as(gd::string const& value) {
         return value;
     }
 }
-
+#endif
 namespace std::filesystem {
     GEODE_INLINE GEODE_HIDDEN std::string format_as(std::filesystem::path const& value) {
         return value.string();

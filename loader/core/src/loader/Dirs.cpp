@@ -1,6 +1,6 @@
 
 #include <Geode/loader/Dirs.hpp>
-#include <crashlog.hpp>
+#include <internal/crashlog.hpp>
 #include <filesystem>
 #include "LoaderImpl.hpp"
 

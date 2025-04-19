@@ -2,7 +2,7 @@
 
 #include <Geode/Result.hpp>
 
-#include <Geode/DefaultInclude.hpp>
+#include "../core/Prelude.hpp"
 #include <functional>
 #include <string>
 #include <unordered_map>

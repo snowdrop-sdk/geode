@@ -4,7 +4,7 @@
 #include <Geode/utils/file.hpp>
 #include <Geode/utils/string.hpp>
 #include <Geode/utils/general.hpp>
-#include <about.hpp>
+#include <internal/about.hpp>
 #include <matjson.hpp>
 #include <utility>
 #include <clocale>

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Geode/DefaultInclude.hpp>
+#include "../core/Prelude.hpp"
 #include <algorithm>
 #include <string>
 #include <concepts>

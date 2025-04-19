@@ -1,6 +1,6 @@
 #include <Geode/utils/terminate.hpp>
 #include <Geode/loader/Mod.hpp>
-#include "../loader/Log.hpp"
+#include <Geode/loader/Log.hpp>
 
 using namespace geode::prelude;
 

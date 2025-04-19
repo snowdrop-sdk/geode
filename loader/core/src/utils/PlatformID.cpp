@@ -1,5 +1,5 @@
 
-#include <Geode/platform/platform.hpp>
+#include <Geode/core/Prelude.hpp>
 #include <Geode/utils/general.hpp>
 #include <Geode/utils/ranges.hpp>
 

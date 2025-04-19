@@ -1,4 +1,4 @@
-#include <Geode/DefaultInclude.hpp>
+#include <Geode/core/Prelude.hpp>
 
 #ifdef GEODE_IS_WINDOWS
 // GLEW needs to be included before GL but GLFW3 doesn't do that so this is 

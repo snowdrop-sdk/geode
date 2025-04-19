@@ -1,4 +1,4 @@
-#include <Geode/loader/GameEvent.hpp>
+#include <Geode/loader/event/GameEvent.hpp>
 
 using namespace geode::prelude;
 

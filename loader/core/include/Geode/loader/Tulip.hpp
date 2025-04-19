@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../core/Prelude.hpp"
 #include <tulip/TulipHook.hpp>
 
 namespace geode::hook {

@@ -1,5 +1,5 @@
 #include "Geode/utils/file.hpp"
-#include <Geode/DefaultInclude.hpp>
+#include <Geode/core/Prelude.hpp>
 
 using namespace geode::prelude;
 

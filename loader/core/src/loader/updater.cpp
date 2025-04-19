@@ -1,7 +1,7 @@
 ﻿#include "updater.hpp"
 #include <Geode/utils/web.hpp>
-#include <resources.hpp>
-#include <hash.hpp>
+#include <internal/resources.hpp>
+#include <Geode/utils/hash.hpp>
 #include <utility>
 #include "LoaderImpl.hpp"
 #include "ModMetadataImpl.hpp"
